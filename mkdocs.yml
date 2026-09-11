@@ -33,7 +33,9 @@ plugins:
 
 nav:
   - 首页: index.md
-  - 快速上手: quickstart.md
+  - 快速上手:
+      - 快速上手: quickstart.md
+      - 快速开始SLAM: quickstart/slam.md
   - 配置说明: config.md
 
 markdown_extensions:
