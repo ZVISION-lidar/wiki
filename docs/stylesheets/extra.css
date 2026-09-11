@@ -1,40 +1,54 @@
 /* ============================================================
-   侧栏导航层级差异化
-   让"分组标题"（如：快速上手）比"子项"（如：快速开始demo）
-   字号更大、更粗，层级关系一眼可辨
+   侧栏导航样式 - navigation.indexes 模式
    ============================================================ */
 
-/* 顶层 nav 项（标题/分组）：放大 + 加粗 + 上色 */
-.md-nav--primary > ul > li.md-nav__item > label.md-nav__link,
-.md-nav--primary > ul > li.md-nav__item > a.md-nav__link {
-    font-size: 0.95rem;       /* 默认约 0.7rem */
-    font-weight: 700;         /* 默认 normal */
-    color: var(--md-primary-fg-color);  /* 用主题主色 */
-    padding: 0.4rem 0.6rem;
-    margin: 0.15rem 0;
+/* 侧栏顶部分组标题（快速上手 / 配置说明）：大字号 + 加粗 */
+.md-nav--primary > ul > li > .md-nav__link {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--md-primary-fg-color) !important;
+    padding: 0.35rem 0.6rem !important;
+    margin: 0.1rem 0 !important;
 }
 
-/* 鼠标悬停时高亮 */
-.md-nav--primary > ul > li.md-nav__item > label.md-nav__link:hover,
-.md-nav--primary > ul > li.md-nav__item > a.md-nav__link:hover {
-    color: var(--md-accent-fg-color);
+/* 分组标题 hover */
+.md-nav--primary > ul > li > .md-nav__link:hover {
+    color: var(--md-accent-fg-color) !important;
+    background: transparent !important;
 }
 
-/* 嵌套的子项：缩小到正常大小 */
+/* 子项（概览 / 快速开始demo 等）：正常大小 */
 .md-nav--primary .md-nav .md-nav__link {
-    font-size: 0.75rem;
-    font-weight: 400;
-    padding: 0.25rem 0.6rem;
+    font-size: 0.78rem !important;
+    font-weight: 400 !important;
+    padding: 0.22rem 0.6rem !important;
 }
 
-/* 子项鼠标悬停 */
+/* 子项 hover */
 .md-nav--primary .md-nav .md-nav__link:hover {
-    color: var(--md-accent-fg-color);
+    color: var(--md-accent-fg-color) !important;
 }
 
-/* 子项添加左侧缩进，让层级更明显 */
-.md-nav--primary .md-nav {
-    padding-left: 0.8rem;
-    border-left: 1px solid var(--md-default-fg-color--lightest);
-    margin-left: 0.6rem;
+/* 二级嵌套缩进（如果有的话） */
+.md-nav--primary .md-nav .md-nav .md-nav__link {
+    font-size: 0.72rem !important;
+    padding-left: 1.2rem !important;
 }
+
+/* 侧栏整体内边距 */
+.md-sidebar {
+    background: var(--md-default-bg-color);
+}
+
+/* 修复：确保中文正常渲染，不使用衬线回退 */
+body, .md-typeset {
+    font-family: "Roboto", "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+                 -apple-system, BlinkMacSystemFont, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* 标题层级保持清晰 */
+.md-typeset h1 { font-size: 2rem; font-weight: 700; }
+.md-typeset h2 { font-size: 1.5rem; font-weight: 700; }
+.md-typeset h3 { font-size: 1.2rem; font-weight: 600; }
