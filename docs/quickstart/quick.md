@@ -1,7 +1,3 @@
----
-hide:
-  - navigation
----
 
 # 快速
 
