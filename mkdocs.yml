@@ -20,7 +20,6 @@ theme:
         name: 切换亮色模式
   features:
     - navigation.tabs
-    # - navigation.sections
     - navigation.indexes
     - navigation.top
     - search.suggest
@@ -39,10 +38,10 @@ extra_css:
 
 nav:
   - 首页: index.md
-  - 快速上手:
-      # - 概览: quickstart/quick.md
+  - 快速上手: 
+      - quickstart/index.md
       - 快速开始demo:
-          # - quickstart/demo.md
+          - quickstart\demo\index.md
           - demo1: quickstart/demo/demo1.md
           - demo2: quickstart/demo/demo2.md
       - 快速开始SLAM: quickstart/slam.md
