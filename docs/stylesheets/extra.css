@@ -1,0 +1,40 @@
+/* ============================================================
+   侧栏导航层级差异化
+   让"分组标题"（如：快速上手）比"子项"（如：快速开始demo）
+   字号更大、更粗，层级关系一眼可辨
+   ============================================================ */
+
+/* 顶层 nav 项（标题/分组）：放大 + 加粗 + 上色 */
+.md-nav--primary > ul > li.md-nav__item > label.md-nav__link,
+.md-nav--primary > ul > li.md-nav__item > a.md-nav__link {
+    font-size: 0.95rem;       /* 默认约 0.7rem */
+    font-weight: 700;         /* 默认 normal */
+    color: var(--md-primary-fg-color);  /* 用主题主色 */
+    padding: 0.4rem 0.6rem;
+    margin: 0.15rem 0;
+}
+
+/* 鼠标悬停时高亮 */
+.md-nav--primary > ul > li.md-nav__item > label.md-nav__link:hover,
+.md-nav--primary > ul > li.md-nav__item > a.md-nav__link:hover {
+    color: var(--md-accent-fg-color);
+}
+
+/* 嵌套的子项：缩小到正常大小 */
+.md-nav--primary .md-nav .md-nav__link {
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding: 0.25rem 0.6rem;
+}
+
+/* 子项鼠标悬停 */
+.md-nav--primary .md-nav .md-nav__link:hover {
+    color: var(--md-accent-fg-color);
+}
+
+/* 子项添加左侧缩进，让层级更明显 */
+.md-nav--primary .md-nav {
+    padding-left: 0.8rem;
+    border-left: 1px solid var(--md-default-fg-color--lightest);
+    margin-left: 0.6rem;
+}

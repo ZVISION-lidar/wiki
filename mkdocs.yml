@@ -1,4 +1,4 @@
-site_name: 我的Wiki文档
+site_name: ZVISION的Wiki文档
 site_description: 技术文档知识库
 site_author: Administrator
 
@@ -31,10 +31,14 @@ plugins:
   - search:
       lang: zh
 
+extra_css:
+  - stylesheets/extra.css
+
 nav:
   - 首页: index.md
   - 快速上手:
-      - 快速开始demo: quickstart.md
+      - 快速上手: quickstart/index.md
+      - 快速开始demo: quickstart/demo.md
       - 快速开始SLAM: quickstart/slam.md
   - 配置说明: config.md
 
