@@ -4,25 +4,19 @@
 
 ## 选择你的入口
 
-<div class="grid cards" markdown>
-
--   :material-rocket-launch:{ .lg .middle } **快速开始 demo**
-
-    ---
+!!! abstract "快速开始 demo"
+    :material-rocket-launch: **快速开始 demo**
 
     以最小可运行 Demo 带你 5 分钟跑通整个流程，适合第一次接触本项目的同学。
 
     [:octicons-arrow-right-24: 开始 demo](demo.md){ .md-button }
 
--   :material-map:{ .lg .middle } **快速开始 SLAM**
-
-    ---
+!!! abstract "快速开始 SLAM"
+    :material-map: **快速开始 SLAM**
 
     下载示例数据包，实时启动 SLAM 节点并查看建图效果，含常见问题排查。
 
     [:octicons-arrow-right-24: 开始 SLAM](slam.md){ .md-button }
-
-</div>
 
 ## 通用前置要求
 

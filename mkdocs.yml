@@ -21,7 +21,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.expand
+    # - navigation.expand
     - navigation.top
     - search.suggest
     - search.highlight
@@ -37,7 +37,7 @@ extra_css:
 nav:
   - 首页: index.md
   - 快速上手:
-      - 快速上手: quickstart/index.md
+      - 概览: quickstart/index.md
       - 快速开始demo: quickstart/demo.md
       - 快速开始SLAM: quickstart/slam.md
   - 配置说明: config.md
@@ -46,3 +46,4 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.emoji
