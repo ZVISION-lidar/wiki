@@ -98,28 +98,6 @@ my_wiki/
 
 ## 7. 下一步
 
-- 📖 阅读 [配置说明](../config.md)，了解 `mkdocs.yml` 的全部可选项
+- 📖 阅读 [配置说明](../../config.md)，了解 `mkdocs.yml` 的全部可选项
 - 🎨 想要更丰富的主题特性（Tab 切换、Mermaid 图表、数学公式等），按需在 `mkdocs.yml` 启用对应扩展
 - 🚀 推送 `main` 分支即可一键部署，无需手动 `gh-deploy`
-
-## 8. 快速上手 · 子页面导航
-
-<div class="grid cards" markdown>
-
--   :material-rocket-launch:{ .lg .middle } **快速开始 demo**
-
-    ---
-
-    以最小可运行 Demo 带你 5 分钟跑通整个流程，适合第一次接触本项目的同学。
-
-    [:octicons-arrow-right-24: 开始 demo](demo.md){ .md-button }
-
--   :material-map:{ .lg .middle } **快速开始 SLAM**
-
-    ---
-
-    下载示例数据包，实时启动 SLAM 节点并查看建图效果，含常见问题排查。
-
-    [:octicons-arrow-right-24: 开始 SLAM](slam.md){ .md-button }
-
-</div>

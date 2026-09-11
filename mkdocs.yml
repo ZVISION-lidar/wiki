@@ -41,7 +41,7 @@ nav:
   - 快速上手: 
       - quickstart/index.md
       - 快速开始demo:
-          - quickstart\demo\index.md
+          - quickstart/demo/index.md
           - demo1: quickstart/demo/demo1.md
           - demo2: quickstart/demo/demo2.md
       - 快速开始SLAM: quickstart/slam.md

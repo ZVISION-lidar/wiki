@@ -9,7 +9,7 @@
 
 以最小可运行 Demo 带你 5 分钟跑通整个流程，适合第一次接触本项目的同学。
 
-[开始 demo →](demo.md){ .md-button }
+[开始 demo →](demo/index.md){ .md-button }
 
 ### 🗺️ 快速开始 SLAM
 
