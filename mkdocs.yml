@@ -35,13 +35,35 @@ extra_css:
 
 nav:
   - 首页: index.md
-  - 快速上手: 
+  - 快速上手:
       - quickstart/index.md
       - 快速开始demo:
           - quickstart/demo/index.md
           - demo1: quickstart/demo/demo1.md
           - demo2: quickstart/demo/demo2.md
       - 快速开始SLAM: quickstart/slam.md
+  - 产品文档:
+      - ZVISION NZ 系列: zvision_nz_series/index.md
+      - Odin1:
+          - 产品总览: zvision_nz_series/odin1/index.md
+          - 00 封面: zvision_nz_series/odin1/00-cover.md
+          - 00 阅读提示: zvision_nz_series/odin1/00-reading-tips.md
+          - 01 产品概述: zvision_nz_series/odin1/01-产品概述.md
+          - 02 硬件说明: zvision_nz_series/odin1/02-硬件说明.md
+          - 03 安装指南: zvision_nz_series/odin1/03-安装指南.md
+          - 04 电源与连接: zvision_nz_series/odin1/04-电源与连接.md
+          - 05 数据输出: zvision_nz_series/odin1/05-数据输出.md
+          - 06 建图与重定位API: zvision_nz_series/odin1/06-建图与重定位API.md
+          - 07 Ubuntu快速启动: zvision_nz_series/odin1/07-Odin1-Ubuntu快速启动.md
+          - 08 Windows快速启动: zvision_nz_series/odin1/08-OdinViewer-Windows快速启动.md
+          - 09 固件升级: zvision_nz_series/odin1/09-固件升级.md
+          - 10 重定位使用说明: zvision_nz_series/odin1/10-重定位使用说明.md
+          - 11 重定位地图获取: zvision_nz_series/odin1/11-重定位地图获取.md
+          - 12 时间同步: zvision_nz_series/odin1/12-时间同步.md
+          - 13 维护与故障排除: zvision_nz_series/odin1/13-维护与故障排除.md
+          - 14 技术参数: zvision_nz_series/odin1/14-技术参数.md
+          - 15 常见问题FAQ: zvision_nz_series/odin1/15-常见问题FAQ.md
+          - 99 关注我们: zvision_nz_series/odin1/99-关注我们.md
   - 配置说明: config.md
 
 markdown_extensions:

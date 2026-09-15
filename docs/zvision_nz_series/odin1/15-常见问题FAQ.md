@@ -1,0 +1,786 @@
+<!-- 已从 Odin1 Jekyll 文档站迁移，图片/PDF/数模资源待手动补齐 -->
+# 15. 常见问题 FAQ
+
+> 适用产品：Odin1  
+> 配套软件：ROS Driver、MindCloud Studio  
+
+> 录制bag包规范：
+- 设置use_host_ros_time: 0
+- ros2录制bag包之前，请使用QoS进行录包，可以尽可能的减少丢包几率。使用方法如下：
+
+> ```ros2 bag record /odin1/cloud_raw /odin1/imu /odin1/odometry /odin1/tf  /odin1/image/compressed --qos-profile-overrides-path rosbag2_qos.yaml  ```
+
+> [rosbag2_qos.yaml文件获取](./assets/code/rosbag2_qos.yaml)
+
+<p style="font-size: 12px; color: #9a9a9a; line-height: 1.7; margin-top: 1em;">免责声明：Odin1 输出的 odometry / 定位结果仅供客户上层应用参考，我司不对基于该数据的判断与运行结果承担责任。在无人机、特种作业等对定位连续性要求较高的场景中，里程计漂移可能导致炸机、设备损坏等后果，相关风险需由使用方自行评估。我们无法保证 Odin1 适配所有场景，请在直接使用其输出结果前充分完成场景化测试，并做好安全冗余设计（如失效保护、多传感器融合）。</p>
+
+---
+
+## 一、硬件与供电
+
+### ❓ Q1.1 标配适配器规格是什么？为什么强烈要求按规格供电？
+**回答：**
+- **标配**：建议使用 12V / 2A 适配器。
+- **风险点**：**输入电压超过 26V 会直接烧毁内部 DC 芯片**，26.8V 即烧毁。
+- **建议**：客户使用电源前，请提供电源型号 / 输出范围 / 尖峰电压参数确认；切勿使用非官方电源线。拿到的电源线如果有裸线，请在使用前将裸露的地方用绝缘胶带包起来后使用。
+
+### ❓ Q1.2 设备红灯不亮 / 无法上电怎么办？
+**回答：**
+- **常见原因**：电源正负极是否反接；航插头接触不良；反复插拔后表现为间歇性失败。
+- **现场操作**：
+  1. 万用表检查电源是否符合 DC 12V 2A（12~24V 以内）；
+  2. 拔下航插重新插紧到位、确认锁紧，左右轻微晃动观察红灯是否亮起；
+  3. 问题排查：万用表调至【导通/降压】档位，黑色笔接 GND，红色笔先后接触 SYNC 和 GPIO（wiki 中有定义说明）引脚，观察万用表读数：
+     - 正常情况：SYNC 引脚降压在 0.9V 左右（新版供电线取消SYNC线输出），GPIO 引脚降压在 1.3V 左右；
+     - 异常情况：低于 0.6V 或者不显示压降证明芯片内部烧坏，请联系售后。
+
+### ❓ Q1.3 Odin1 连接到电脑后运行驱动没有数据
+**回答：**
+- 请检查设备是否供电正常，正常供电红灯常亮；
+- 输入 `lsusb` 查看设备是否被识别，设备 id：`2207:0019`；
+- 检查 `/etc/udev/rules.d/99-odin1.rules` 文件是否存在，如果不存在请手动创建，存在则检查文件内容是否正确；
+- 重启 udev 服务：`sudo udevadm control --reload-rules && sudo udevadm trigger`；
+- 检查驱动中的 Log 信息是否出现版本过低的提示字样，如果有请更新固件，更新方法见 [固件升级](09-固件升级.md)。
+- 如果之前可以正常使用，使用过程中提示`start listening usb event, further connection should be handleed by hotplug_callback`，一般这种情况是脚本启动驱动，后台仍存在节点在运行，需要将后台节点杀掉后重新插拔USB，重新启动驱动。**杀进程时务必使用 SIGINT / SIGTERM 让驱动走清理流程释放 USB，详见 [Q2.7](#-q27-启动驱动报-failed-to-claim-interface-0-libusb_error_busy--提示-further-connection-should-be-handled-by-hotplug_callback)，否则下一次启动会出现 `LIBUSB_ERROR_BUSY`。**
+
+### ❓ Q1.4 线材与航插选型？
+**回答：**
+- 我司提供**原生 USB 3.0 数据线、防水航插供电线**。
+- 目前没有提供 90 度弯头航插头。
+- 极端紧凑安装可选定制方案：① 取消防水，电源线背板直出 + 密封胶；② 定制弯头 / 长度（联系商务沟通）。
+
+---
+
+## 二、USB 与连接稳定性
+
+### ❓ Q2.1 USB 频繁报 `heartBeat timeout` / `waiting for device connecting` / 需要掉电重启？
+**回答：** 建议排查顺序：
+1. **USB 集线器负载**：避免 Odin 与多台高带宽设备共享同一 USB 2.0 hub。建议 Odin1 独占总线，或在系统启动时**最后上电 Odin**，让其握手更稳定；
+2. **驱动版本**：升级到最新 ROS Driver（v0.10.5 及以上）；
+3. **重定位地图配置**：确认地图文件路径正确，且地图与算法版本匹配，即使用最新版的驱动采集地图或使用最新版的 MindCloud 处理地图；
+4. **主机算力**：弱算力平台（如部分边缘计算盒）CPU 长期满载会导致心跳漏帧，建议预留资源。
+
+### ❓ Q2.2 心跳超时后 USB 从 3.2 协商降到 2.0 / 2.1？
+**回答：** 典型成因：
+1. 单台 LiDAR 硬件异常（换线无效、换设备恢复 → 通常是可能该设备硬件故障，需返修）；
+2. 主机 USB 控制器降速兼容（部分平台启用了 USB 兼容模式）。
+
+处置：先在另一台主机上交叉验证；若另一台主机无问题，可能是当前使用开发板问题。
+
+### ❓ Q2.3 升级固件报 `LIBUSB_ERROR_NO_MEM` / 传输到 90%+ 失败？
+**回答：**
+1. 升级时**单独接到 PC** 进行，不要挂在机器人主机上；
+2. 升级期间避免 host 总线上其他高带宽设备占用，可通过 `lsusb` 检查；
+3. 偶发情况下重试 1–2 次可通过；
+4. 若在低算力主机上稳定复现，请一并调大 usbfs 内存池，见 Q2.8。
+
+### ❓ Q2.4 `lsusb` 看不到设备 / 红灯亮但无任何枚举？
+**回答：** 大多为底层供电或硬件问题（与非官方电源线相关案例较多），请按 Q1.2 排查电源；如本地手段无法恢复，按售后流程寄回。
+
+### ❓ Q2.5 系统中存在多个 OpenCV / libusb 版本时驱动启动失败？
+**回答：**
+- **现象**：报错 `[host sdk sample-2] process has died [pid 6487, exit code -11 ......]`；单独关闭 sendrgb 可正常启动；
+- **OpenCV**：ROS1 同时存在 4.2 / 4.5 时部分系统会冲突。建议按 README 强制安装单一版本；或者使用 docker 进行环境隔离；
+- **libusb**：可临时通过调整 `LD_LIBRARY_PATH` 优先加载系统兼容版本规避。
+
+### ❓ Q2.6 Odin1 和 RTK 一起使用时，RTK 无法固定？
+**回答：**
+- USB 3.0 在工作时会产生宽频带电磁辐射，其中包含 GNSS L1 频段（1575.42 MHz）附近的噪声；
+- 建议降级为 USB 2.0 或者使用屏蔽更好的连接线。
+
+### ❓ Q2.7 启动驱动报 `failed to claim interface 0: LIBUSB_ERROR_BUSY` / 提示 `further connection should be handled by hotplug_callback`？
+**回答：** 这是**上一次启动残留的驱动节点仍占着 USB 接口**导致的，常见于用脚本反复启动驱动、或上一次用 `kill -9` 强杀过进程。
+
+#### 1. 根因：必须用 SIGINT，不能用 `kill -9`
+
+驱动主进程 `host_sdk_sample` 只对 **SIGINT(2)** 和 **SIGTERM(15)** 注册了清理回调（close device、释放 libusb interface、DeInit lidar）：
+
+```cpp
+// host_sdk_sample.cpp
+static void signal_handler(int signum) {
+    if (signum == SIGINT || signum == SIGTERM) {
+        // Close device  → 释放 USB interface
+        // Deinitializing lidar system
+    }
+}
+signal(SIGINT, signal_handler);
+signal(SIGTERM, signal_handler);
+```
+
+- `kill -9 PID`（SIGKILL）**不能被捕获**，进程被强杀，USB interface 没释放 → 下次启动 `LIBUSB_ERROR_BUSY`；
+- `kill -2 PID`（SIGINT）等价于命令行 `Ctrl+C`，会走清理流程，USB 正常释放；
+- `kill -15 PID`（SIGTERM）效果一样。
+
+#### 2. 手动清理命令
+
+```bash
+# 按进程名发 SIGINT（推荐，不用查 PID）
+pkill -SIGINT -f host_sdk_sample
+
+# 等价写法
+pkill -2 -f host_sdk_sample
+killall -SIGINT host_sdk_sample
+```
+
+`-f` 是匹配整条命令行，`host_sdk_sample` 是 launch 文件里启动的主可执行文件，是真正持有 USB 句柄的那个节点。
+
+#### 3. 推荐写进启动脚本的清理片段
+
+在 `ros2 launch ...` **之前**插入：
+
+```bash
+#!/bin/bash
+
+# === 启动前先优雅清理上一次残留的节点（关键：先 SIGINT 让它释放 USB） ===
+cleanup_old() {
+    local procs=(
+        host_sdk_sample
+        pcd2depth_ros2_node
+        cloud_reprojection_ros2_node
+        image_overlay_node
+    )
+
+    # 第 1 步：发 SIGINT（=Ctrl+C），触发 signal_handler 释放 USB
+    for p in "${procs[@]}"; do
+        pkill -SIGINT -f "$p" 2>/dev/null
+    done
+
+    # 第 2 步：最多等 5 秒让它自己清理退出
+    for i in {1..10}; do
+        if ! pgrep -f host_sdk_sample >/dev/null; then
+            break
+        fi
+        sleep 0.5
+    done
+
+    # 第 3 步：兜底——如果还赖着不走，再 SIGTERM；最后才 SIGKILL
+    if pgrep -f host_sdk_sample >/dev/null; then
+        echo "进程未在 5s 内退出，发送 SIGTERM..."
+        for p in "${procs[@]}"; do pkill -SIGTERM -f "$p" 2>/dev/null; done
+        sleep 2
+    fi
+    if pgrep -f host_sdk_sample >/dev/null; then
+        echo "仍未退出，强杀 SIGKILL（USB 可能仍占用，需要拔插）"
+        for p in "${procs[@]}"; do pkill -SIGKILL -f "$p" 2>/dev/null; done
+    fi
+}
+
+cleanup_old
+
+# === 然后再正常启动 ===
+source /opt/ros/humble/setup.bash
+source ~/odin_ws/install/setup.bash
+ros2 launch odin_ros_driver odin1_ros2.launch.py
+```
+
+要点：
+1. **先 SIGINT → 等待 → 再 SIGKILL**，顺序不能颠倒；
+2. 必须 `sleep` 几秒，因为 close device、DeInit 不是瞬间完成的；
+3. `host_sdk_sample` 是最重要的那个，其他几个跟 launch 一起起的节点顺手清理掉，避免节点名冲突；
+4. **不要一上来就 `pkill -9`**，否则必然留下 `LIBUSB_ERROR_BUSY` 的坑。
+
+#### 4. 兜底：USB 已被强杀进程占住的恢复方法
+
+```bash
+# 方法 A：直接重置 USB 设备（不用拔线）
+sudo usbreset 2207:0019
+# 或：sudo usbreset /dev/bus/usb/<bus>/<device>
+
+# 方法 B：物理重新插拔 Odin1 USB 线
+```
+
+按上述脚本改造后，`failed to claim interface 0: LIBUSB_ERROR_BUSY` 基本不会再出现。
+
+### ❓ Q2.8 低算力主机上运行一段时间后报 `LIBUSB_ERROR_NO_MEM` / `transfer error`？
+**回答：**
+- **现象**：同一套驱动在 PC 上运行正常，部署到算力较弱的板子（如嵌入式 ARM 主机）上跑一段时间后开始报错，模组发送速率恒定，唯一变化的是运行 SDK 的主机：
+
+```shell
+<ERROR>: submit x transfer fail LIBUSB_ERROR_NO_MEM.
+<ERROR>: transfer error: LIBUSB_TRANSFER_ERROR.
+```
+
+- **根因**：libusb 异步传输提交到内核后会占用每设备的 usbfs 内存池（`/sys/module/usbcore/parameters/usbfs_memory_mb`，默认 **16 MB**）。慢主机上 libusb 事件线程回收已完成传输的速度跟不上新传输的提交速度，在途的发送传输在池中堆积，直到提交失败返回 `LIBUSB_ERROR_NO_MEM`，随后连带出现 `transfer error`。
+- **解决方法**：调大 usbfs 内存上限。
+
+```shell
+# 查看当前值（默认 16）
+cat /sys/module/usbcore/parameters/usbfs_memory_mb
+
+# 临时调大到 128 MB（立即生效，重启后失效）
+echo 128 | sudo tee /sys/module/usbcore/parameters/usbfs_memory_mb
+```
+
+需要重启后仍生效时，以下二选一：
+
+```shell
+# 方式 A：内核启动参数（编辑 GRUB 或板子的 bootargs）
+usbcore.usbfs_memory_mb=128
+
+# 方式 B：modprobe 配置
+echo "options usbcore usbfs_memory_mb=128" | sudo tee /etc/modprobe.d/usbcore.conf
+```
+
+> 说明：新版 SDK 的 USB 层已对在途发送传输数量做流控，并在每个终止状态释放缓冲，避免瞬时错误演变为不可恢复的堆积。调大 usbfs 池属于提高余量的措施，在慢主机上或需要传输大文件（如重定位地图）时仍建议保留 128 MB。
+
+### ❓ Q2.9 驱动启动报 `LIBUSB_ERROR_ACCESS` / `libusb couldn't open USB device ... errno=13`？
+**回答：** 当前用户没有访问该 USB 设备的权限，通常是 udev 规则缺失或用户组不对。
+
+1. 创建 `/etc/udev/rules.d/99-odin.rules`，内容为：
+
+```shell
+SUBSYSTEM=="usb", ATTR{idVendor}=="2207", ATTR{idProduct}=="0019", MODE="0666", GROUP="plugdev"
+```
+
+2. 重载规则并重新插拔设备：
+
+```shell
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+3. 确认当前用户在 `plugdev` 组内（改完需重新登录才生效）：
+
+```shell
+sudo usermod -aG plugdev $USER
+```
+
+> 不建议长期用 `sudo` 运行驱动来绕过权限问题。
+
+---
+
+## 三、ROS Driver 报错
+
+### ❓ Q3.1 ROS Driver 无法获取标定参数
+**回答：** 表现：
+- config 文件夹中没有生成 `calib.yaml` 文件；
+- `cloud_slam` 点云呈现黑色，且 odometry 很容易发散。
+- recorddata结束后cam_in_ex.txt中没有保存到正确的参数
+
+若驱动启动时报 `ERROR：Missing camera node 'cam_0'`，请先重新插拔一次 USB（标定文件在每次连接时从设备获取）。
+
+解决方案：联系留形售后支持，获取参数重新写入工具。若之前正常运行，则可以在之前的驱动中找到标定文件进行复用。若无记录保存，可联系留形售后支持协助查询出场记录。
+
+### ❓ Q3.2 怎么查看当前固件和驱动的版本？
+**回答：** 运行驱动，在驱动运行终端中可以看到固件与驱动版本的打印信息。
+
+### ❓ Q3.3 重定位模式下启动驱动报错 `file start fail. transfer relocalizaiton map fail. please retry.` / 开流崩溃 / 进程内存被打满？
+**回答：**
+- **典型现象**：终端持续打印 `file start fail. transfer relocalizaiton map fail. please retry.`，重试无效甚至导致 driver 进程内存被打满。
+- **根因**：旧版 Driver 在重定位模式下，开流过程中触发 `deinit`，已知 `deinit` 之后再开流会爆内存。下列两种情况会触发 `deinit`：
+  1. **地图文件路径错误**（最常见）—— 加载路径不存在 / 没有读权限 / 不是合法 odin1 地图；
+  2. **地图上传 odin1 连续 3 次失败** —— 通常发生在 USB 链路不稳或主机算力被占满时。
+- **解决方案**：
+  1. 升级到最新 ROS Driver（v0.11.0），固件版本升级到 0.12.0；
+  2. 检查启动参数中的地图绝对路径，确保文件可读、与算法版本匹配；
+  3. 如果链路上传仍然失败，请按 Q2.1 排查 USB 集线器 / 自配线材 / 主机算力，并确认升级期间无其他高带宽设备占用同一总线。
+
+### ❓ Q3.4 算法是否有重置功能，怎么使用？
+**回答：** 使用 Driver 版本高于 0.10.0，建议使用 0.10.5 驱动版本 + 0.11.9 固件版本：
+
+```bash
+cd $ROS_WORKSPACE/src/odin_ros_driver
+./set_param.sh algo_reset 1
+```
+
+同时配套：IMU 平滑发送（最高 400 Hz）、PTP 平滑、双图叠加可视化、修复重投影不准确。
+
+### ❓ Q3.5 数据阻塞 / 话题积压 / `the queue is full` 排查指南
+
+这类问题的根源通常属于 DDS 配置或 QoS 设置不当，建议按以下顺序排查。
+
+#### 情况 A：DDS 中间件被替换（当前非 FastDDS）
+
+**现象：** 节点启动缓慢或失败，话题完全不流通，终端报错：
+
+```
+Failed to find a free participant index for domain 42
+[ERROR] [rmw_cyclonedds_cpp]: rmw_create_node: failed to create domain
+```
+
+**检查方法：**
+
+```bash
+ros2 doctor --report | grep -i middleware
+# 或
+echo $RMW_IMPLEMENTATION
+```
+
+若输出非 `rmw_fastrtps_cpp`，说明 `~/.bashrc`（或其他 shell 配置文件）中存在 `export RMW_IMPLEMENTATION=...`。
+
+**修复：** 删除或注释该行，重新加载后重启所有 ROS2 节点：
+
+```bash
+source ~/.bashrc
+# 确认已恢复：middleware name    : rmw_fastrtps_cpp
+ros2 doctor --report | grep -i middleware
+```
+
+> Odin ROS Driver 默认在 **FastDDS**（`rmw_fastrtps_cpp`）下验证。若确实需要在同一主机上共存多个 DDS，请用独立 terminal session 的临时环境变量隔离，而非写入 `.bashrc`。
+
+#### 情况 B：QoS 不匹配导致节点间数据默默丢弃
+
+**现象：** 节点启动正常，但某些话题永远收不到数据。
+
+**原因：** ROS2 中 pub/sub 双方 QoS policy 必须兼容（`Reliable` 与 `BestEffort` 不能配对），不匹配时双方均不为错误但数据默默丢弃。
+
+**检查方法：**
+
+```bash
+ros2 topic info /odin1/cloud_raw --verbose
+# 比对 Publisher 和 Subscription 的 QoS profile
+```
+
+**修复：** 将订阅端 QoS 设置为与驱动一致。若使用 `ros2 bag record`，务必配合 QoS override 文件（见 Q13.2）。
+
+#### 情况 C：资源或带宽璶颈导致驱动内部队列溢出（`the queue is full`）
+
+**现象：** 驱动终端打印 `the queue is full`，话题延迟越来越大。
+
+**原因：** SDK 内部队列入队速度 > 发布速度，导致积压溢出。常见于主机 CPU/内存被占用或数据传输链路带宽不足。
+
+**修复：**
+
+1. 给 Odin1 分配独立的数据传输链路，避免共享网络；
+2. 通过 `ROS_DOMAIN_ID` + `ROS_LOCALHOST_ONLY=1` 做通信域隔离，减少无关广播；
+3. 关闭不必要的话题（如 `sendrgb: 0`、`sendcloudrender: 0`）；
+4. 优先订阅小数据量话题，如用 `/odin1/image/compressed` 替代 `/odin1/image`。
+
+### ❓ Q3.6 编译报 `ld: cannot find -llydHostApi` 或符号找不到？
+**回答：** 清理旧的编译产物后重新执行安装脚本。
+
+```shell
+# ROS1
+rm -rf build/ devel/
+
+# ROS2
+rm -rf build/ install/ log/
+```
+
+另请确认源码是否 clone 到了 `[ros_workspace]/src/` 目录下，放在其他位置会导致编译报错。
+
+### ❓ Q3.7 数据流开启后立即提示 `Device disconnected, waiting for reconnection...`？
+**回答：**
+- **现象**：
+
+```shell
+Device ready and streams activated
+Device detaching...
+Device disconnected, waiting for reconnection...
+```
+
+- **根因**：多见于 ROS2 环境且主机接入复杂网络（如办公 WiFi 与有线并存）。ROS2 默认广播发现，复杂网络环境会造成 publish 阻塞，进而触发设备断连。
+- **解决方法**：
+  - 不需要跨设备通信时，限制 ROS2 只走本机：
+
+```shell
+export ROS_LOCALHOST_ONLY=1
+```
+
+  - 需要跨设备通信时，尽量简化网络环境，建议只保留必要设备的独立小局域网；也可配合 `ROS_DOMAIN_ID` 做通信域隔离。
+
+### ❓ Q3.8 必须保留多个 OpenCV 版本时，出图崩溃怎么解决（不改系统）？
+**回答：** 这与 Q2.5 同根——ROS 的 `cv_bridge`（来自 `/opt/ros/<distro>`）与驱动链接了不同的 OpenCV，同一进程加载两份 `libopencv_core`，`cv::Mat` 由一方创建、另一方释放，跨 ABI 边界导致堆损坏，第一帧 RGB 到来即崩溃。
+
+Q2.5 的做法是卸载多余的 OpenCV。如果系统上必须保留多个 OpenCV 版本，可用下面的替代方案：**在工作区内基于驱动所用的 OpenCV 重新编译 `cv_bridge`**，让两者使用同一份 OpenCV。所有产物只落在 `devel/`，**系统 `/opt/ros` 与系统 OpenCV 不会被改动**。
+
+**步骤一：下载 `vision_opencv`**（分支要与 ROS1 发行版对应），克隆到工作区 `src/` 下、与 `odin_ros_driver` 并列：
+
+```shell
+cd <your_catkin_ws>/src
+git clone -b noetic https://github.com/ros-perception/vision_opencv.git
+```
+
+**步骤二：先编 `cv_bridge`，再编驱动**。顺序很重要：驱动的 `CMakeLists.txt` 在 configure 阶段读取工作区的 `cv_bridge-extras.cmake` 来锁定 OpenCV 版本，若此时 `devel/` 里还没有 `cv_bridge`，驱动只会看到系统 `cv_bridge`，仍会链接到不匹配的 OpenCV。
+
+```shell
+# (1) 先把 cv_bridge 编进工作区
+source /opt/ros/noetic/setup.bash
+cd <your_catkin_ws>
+catkin_make -DBUILD_SYSTEM=ROS1 -DCATKIN_WHITELIST_PACKAGES="cv_bridge" -j$(nproc)
+
+# (2) 再编驱动（此步不要清 build/devel）
+cd <your_catkin_ws>/src/odin_ros_driver/script
+./build_ros.sh
+```
+
+> 最简做法：一条全量编译命令会按依赖顺序自动先编 `cv_bridge`、再编驱动，无需关心顺序：
+> ```shell
+> cd <your_catkin_ws> && catkin_make -DBUILD_SYSTEM=ROS1 -j$(nproc)
+> ```
+
+**验证**：
+
+```shell
+source /opt/ros/noetic/setup.bash
+source <your_catkin_ws>/devel/setup.bash
+ldd <your_catkin_ws>/devel/lib/odin_ros_driver/host_sdk_sample | grep -iE 'cv_bridge|opencv_core'
+```
+
+- 修复前（会崩）：`libcv_bridge.so => /opt/ros/<distro>/lib/...`，且混入不匹配的旧版 `libopencv_core.so`；
+- 修复后：`libcv_bridge.so => <your_catkin_ws>/devel/lib/...`，且所有 `libopencv_*` 为同一版本。
+
+随后运行驱动，确认 `/odin1/image` 稳定发布且不再崩溃。
+
+> 请在干净的 ROS1 环境中操作，不要把 ROS2 发行版（如 foxy）混入 `LD_LIBRARY_PATH`，否则 `cv_bridge` 可能又解析回不匹配的 OpenCV。
+
+### ❓ Q3.9 驱动报 `unknow command code: xx`？
+**回答：** 驱动版本与设备固件版本不匹配，驱动无法解析新固件新增的数据。请将 ROS Driver 与设备固件都升级到配套的最新版本，版本对应关系参见附录 A。
+
+### ❓ Q3.10 驱动启动报 `get device version fail` 后退出？
+**回答：**
+
+```shell
+<ERROR><api.cpp:lidar_get_version:672>: get device version fail.
+get version failed.
+```
+
+设备固件版本过低，请先升级固件，方法见 [固件升级](09-固件升级.md)。
+
+### ❓ Q3.11 RViz 长时间无响应，随后终端提示设备断连？
+**回答：** 请对 Odin1 重新上电（断开并重新接通电源）后重启驱动。若同样的报错反复出现，请按 Q2.1 排查 USB 链路与主机负载；若伴随 `Missed ok response from device, probably wrong interaction procedure.`，处理方式相同。
+
+### ❓ Q3.12 Docker 内启动 RViz 报 `Unable to open X display` / `No protocol specified`？
+**回答：** 在**宿主机**执行以下命令开启图形转发：
+
+```shell
+xhost +
+```
+
+---
+
+## 四、时间同步与延迟
+
+### ❓ Q4.1 Odin 时间比 host 时间“靠后”是 bug 吗？
+**回答：** 早期版本存在该问题，已通过 NTP 平滑 + Driver 时间戳改造在 0.11.0 系列修复。请升级到最新固件 + Driver 后重新配置。
+
+
+### ❓ Q4.3 `cloud_raw` 与 `image` 时间戳存在 20–30 ms gap？
+**回答：** 已定位为 IMU 回调路径上的发布阻塞与 high_odo 处理阻塞，新版 Driver 通过异步化拆分回调修复。请升级到最新 Driver。
+
+### ❓ Q4.4 TF 时间戳与点云时间戳偏差大 / 高速场景 TF 不跟车？
+**回答：** 适合启用高频 TF（HIGHFREQ）模式发布，建议同时关闭 config 中**不必要的数据通信**而非仅关闭 publish，可显著降低 odometry_highfreq 的时间戳跳变。
+
+### ❓ Q4.5 点云的 `header.stamp` 代表一帧的起始时刻还是结束时刻？
+**回答：** dtof 点云分成 32 组逐一曝光（类似卷帘快门），第一点位于第一组曝光，因此 `header.stamp` 与第一组曝光开始时刻一致，代表**整帧的起始时刻**。
+
+### ❓ Q4.6 点云 `offset_time` 的生成依据：`dtof_subframe_odr` 是速率还是微秒间隔？
+**回答：** `dtof_subframe_odr`（odr = output data rate）是**每组（subframe）的输出频率（速率）**，不是微秒间隔。SDK 头文件中"微秒间隔"的描述有误，已安排修改，请以示例代码（按速率使用）为准。
+
+### ❓ Q4.7 第一块点 `offset_time = 0` 是真同时刻，还是未填充？
+**回答：** 是**真时刻**。第一点位于第一组曝光，其时间戳与整帧数据 `header.stamp` 一致，因此 `offset_time = 0` 表示真实的同步起点，并非未填充。
+
+### ❓ Q4.8 图像 `header.stamp` 对应曝光中点还是开始？相机是全局快门还是卷帘快门？
+**回答：**
+- **图像时间戳**：对应**曝光中点**；
+- **相机快门类型**：**全局快门（Global Shutter）**。
+
+### ❓ Q4.9 Ubuntu 24.04（ROS2 Jazzy）下 RViz 点云不显示、TF 报外推错误？
+**回答：**
+- **现象**：RViz 的 **Fixed Frame** 设为 `odom` 时，`lidar` 系的 `cloud_raw` 无法显示，RViz 对 `odom -> imu -> lidar` 链报 transform / 外推（extrapolation）错误；相同配置在 Ubuntu 22.04（Humble）下正常。
+- **根因**：设备点云时间戳通常比里程计时间戳超前约 100 ms。ROS2 Jazzy 的 tf2 采用严格的时间戳查找且不做外推，当 TF 只在里程计频率、且只按里程计时间戳发布时，tf2 找不到能覆盖点云时间戳的变换，查找失败。
+- **解决方法**：在 `config/control_command.yaml` 中把 `tf_extra_publish_rate` 设为大于 0 的值（推荐 100）：
+
+```yaml
+# config/control_command.yaml
+tf_extra_publish_rate: 100  # 0：关闭；>0：补发频率（Hz），ROS2 Jazzy / Ubuntu 24.04 建议开启
+```
+
+它会启动一个额外的定时器，按设定频率、以推进的时间戳持续补发 `odom -> imu` 与 `imu -> lidar` 变换，使 tf2 始终有覆盖点云时间戳的变换。Ubuntu 22.04（Humble）与 ROS1 下通常不需要该配置，保持 `0` 即可。
+
+### ❓ Q4.10 RViz 打印 `TF_OLD_DATA ignoring data from the past ...` 警告？
+**回答：** 这是 ROS / RViz 的正常提示，表示因时间戳冲突忽略了部分 TF 数据。常见于**保持驱动运行的同时给设备重新上电**——设备内部系统时间被重置，新数据的时间戳与 RViz 上一轮缓存的旧数据冲突。点击 RViz 界面底部的 **Reset** 按钮清空其内部状态即可消除警告。
+
+---
+
+## 五、点云与图像质量
+
+### ❓ Q5.1 0.4m 近距离点云测距不准？
+**回答：** 当前 0.4m 内已出现明显拖点，建议**避障近距离用 `cloud_raw`，建图与定位用 `cloud_slam`**。安装时若机器有近距遮挡（如保险杠 / 防撞圈），建议把传感器适度前倾或避让，防止结构干扰。
+
+### ❓ Q5.2 点云看起来有噪点，怎么办？
+**回答：** FOV 边缘 110° 以上区域容易出现噪点，安装时尽量让目标处于 FOV 中央偏向位置。
+
+### ❓ Q5.3 `cloud_raw` 与 `cloud_slam` 有什么区别？为什么 `cloud_raw` 看起来"分层"？
+**回答：**
+- **`cloud_raw`**：未矫正历史位姿的原始点云，时延最低，**用于近处避障 / 实时感知**；
+- **`cloud_slam`**：经位姿矫正后的点云，**用于建图、定位**，无分层现象；
+- "分层"是 Odin1 不回放矫正历史点云的设计本身，不是 bug；建议按用途使用对应话题。
+
+### ❓ Q5.4 RGB 颜色异常（偏暗 / 偏紫）？
+**回答：**
+- **偏紫**：固件层 ISP 配置异常，请联系售后刷新固件即可恢复；
+- **暗光偏暗**：对环境补光，后续硬件版本将改善高增益场景；也可按 Q5.5 手动提高曝光时间 / 增益。
+
+### ❓ Q5.5 可以手动调节相机曝光 / 白平衡吗？
+**回答：** 可以。驱动启动后会注册 4 个 ROS Service，支持在**不重启驱动**的前提下从另一个终端动态调节自动曝光（AE）与自动白平衡（AWB），调节期间数据流不中断。
+
+| Service | 类型 | 用途 |
+|---|---|---|
+| `/odin1/get_ae` | `odin_ros_driver/srv/GetAe` | 查询当前 AE 状态 |
+| `/odin1/get_awb` | `odin_ros_driver/srv/GetAwb` | 查询当前 AWB 状态 |
+| `/odin1/set_ae` | `odin_ros_driver/srv/SetAe` | 设置 AE 模式与手动曝光 / 增益 |
+| `/odin1/set_awb` | `odin_ros_driver/srv/SetAwb` | 设置 AWB 模式与手动 R / B 增益 |
+
+**参数范围与含义**
+
+| 字段 | 范围 | 含义 |
+|---|---|---|
+| `mode` | `0`（自动）/ `1`（手动） | `0` 时设备自行跑 AE / AWB 环路，下方参数被忽略；`1` 时锁定并应用所给参数 |
+| `exposure_time` | `0.0001` ~ `0.033` s（仅手动） | 每帧曝光时间，越长越亮但运动模糊越大 |
+| `gain` | `1.0` ~ `64.0`（仅手动） | 模拟增益，越大越亮但信噪比越差 |
+| `rgain` / `bgain` | `0.1` ~ `4.0`（仅手动） | R / B 通道增益，`rgain` 相对越大画面越暖，`bgain` 相对越大越冷 |
+
+> Gr / Gb 通道由设备固定为 1.0，不可调节。
+
+查询类 Service 额外返回当前 `iso`（`100`~`6400`）、`brightness`（`0`~`255`）、`env_lv`（环境光强指数 `0`~`15`）、`cct`（色温 `2500`~`8000` K）、`is_converged`（是否已收敛）等状态字段，可用于判断环境光照与收敛情况。
+
+**调用示例（ROS2 Humble）**
+
+```bash
+source install/setup.bash
+
+# 查询当前状态
+ros2 service call /odin1/get_ae  odin_ros_driver/srv/GetAe
+ros2 service call /odin1/get_awb odin_ros_driver/srv/GetAwb
+
+# 手动：10 ms 曝光、增益 4.0
+ros2 service call /odin1/set_ae odin_ros_driver/srv/SetAe \
+  "{mode: 1, exposure_time: 0.010, gain: 4.0}"
+
+# 手动白平衡：rgain=1.5、bgain=2.0
+ros2 service call /odin1/set_awb odin_ros_driver/srv/SetAwb \
+  "{mode: 1, rgain: 1.5, bgain: 2.0}"
+
+# 一键恢复自动
+ros2 service call /odin1/set_ae  odin_ros_driver/srv/SetAe  "{mode: 0}"
+ros2 service call /odin1/set_awb odin_ros_driver/srv/SetAwb "{mode: 0}"
+```
+
+**调用示例（ROS1 Noetic）**
+
+```bash
+source devel/setup.bash
+
+# 查询
+rosservice call /odin1/get_ae
+rosservice call /odin1/get_awb
+
+# 手动设置
+rosservice call /odin1/set_ae  "{mode: 1, exposure_time: 0.010, gain: 4.0}"
+rosservice call /odin1/set_awb "{mode: 1, rgain: 1.5, bgain: 2.0}"
+
+# 恢复自动（ROS1 要求字段填齐）
+rosservice call /odin1/set_ae  "{mode: 0, exposure_time: 0.0, gain: 0.0}"
+rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
+```
+
+**不同场景推荐起步参数**
+
+| 场景 | `exposure_time` | `gain` |
+|---|---|---|
+| 明亮室外 | `0.001` ~ `0.005` s | `1.0` ~ `2.0` |
+| 普通室内 | `0.008` ~ `0.015` s | `2.0` ~ `8.0` |
+| 暗光环境 | `0.020` ~ `0.030` s | `8.0` ~ `32.0` |
+| 极暗 | `0.033` s | `32.0` ~ `64.0` |
+
+| 目标色调 | `rgain` | `bgain` |
+|---|---|---|
+| 暖（钨丝灯、夕阳） | `2.0` ~ `2.5` | `1.0` ~ `1.2` |
+| 中性（D65 日光） | `1.5` ~ `1.7` | `1.8` ~ `2.0` |
+| 冷（阴天、荧光） | `1.2` ~ `1.4` | `2.2` ~ `2.6` |
+| 极冷 | `1.0` | `3.0` ~ `4.0` |
+
+**注意事项**
+- Service 最长阻塞约 10 秒等待设备应答，正常几十毫秒返回；
+- 手动模式不会在重启后保留，驱动或设备重启后每次重连均恢复为自动；
+- 返回 `rc = 0` 为成功；`rc = 403` 表示参数越界（手动值超出上表范围时最常见）；`rc = -100` 表示驱动尚未打开设备，请等驱动日志提示设备连接成功后再调用；
+- 实际可用的最大 `exposure_time` 受帧周期 `1 / fps` 限制，高帧率模式下上限会相应降低。
+
+---
+
+## 六、重定位与地图
+
+### ❓ Q6.1 用 Q9000 建图给 Odin1 重定位很难定位？
+**回答：**
+- **现象**：Q9000 扫描的地图相对 Odin1 自建地图更不容易重定位成功。
+- **排查方向**：
+  1. 使用最新版本的 MindCloud 处理和导出 Q9000 的地图文件；
+  2. Q9000 手持扫描时正面镜头角度和高度尽量对齐 Odin1 实际安装角度。
+- **建议方案**：使用 `custom_init_pos` 功能，给定初始位姿，可提高重定位效率。
+
+### ❓ Q6.2 静态重定位 / 设备不动时无法定位？
+**回答：**
+- **算法机制**：算法需要累积 10 次重定位检测后才输出，特征不明显的场景原地不动场景较难凑齐；
+- **建议**：开机后让设备做小幅度运动（步行 / 转身 / 缓慢旋转）以触发检测；针对"上电不在平地、原地旋转风险高"的场景（如机器狗），静态重定位建议搭配init_pose使用。
+
+### ❓ Q6.3 可以竖装雷达重定位吗？
+**回答：** 可以。
+
+### ❓ Q6.4 地图保存失败 / 失败率较高？
+**回答：** 已知优化项已在最新固件 + Driver 落地，建议升级后重测；如仍失败，请录制保存阶段完整日志反馈。
+
+### ❓ Q6.5 地图导入 / 导出与 MindCloud Studio？
+**回答：**
+- **重定位地图导入 MindCloud Studio**：1.0.3 版本 MindCloud 已经可以正常使用；
+- **MindCloud Studio 导出编辑后的地图**：目前不支持，研发已立项；
+- **Q9000 数据导入云平台 → 导出 Odin 重定位地图**：已实现。
+
+### ❓ Q6.6 MindCloud 授权 / 涉密地图不上云？
+**回答：**
+- **授权机制不需要联网**，可在内网通过离线授权方式完成；
+- **MindCloud 授权后可离线使用**，无需上网。
+
+---
+
+## 七、极端场景定位（机载 / 隧道 / 暗光）
+
+### ❓ Q7.1 暗光 + 飞行震动 + 低纹理（白墙立面）场景？
+**回答：**
+1. 现场加装补光（建议白光 / 发散光源）；
+2. 安装尽量减少震动（橡胶减震）。
+
+### ❓ Q7.2 隧道场景：odom 模式悬停打滑、SLAM 模式沿线退化？
+**回答：**
+- **odom 模式**：当前 odom 模式下不输出"位置变化"信息，飞控不能纠偏，弱纹理隧道易漂；
+- **SLAM 模式**：长直退化场景需要充足特征支撑。
+
+建议：
+1. 优化结构设计，确认 Odin1 可视范围内没有扫到机翼、机身、机架等固定障碍物；
+2. 提供至少 5°~10° 的横滚 / 俯仰小幅扰动，避免完全单调直行；
+3. 若测试仍有问题，建议提前联系技术支持做 bag 复盘，建议客户录制 `/odin1/cloud_raw` & `/odin1/imu` & `/odin1/image/compressed` 成一个 bag 包，另提供重定位 bin 地图和标定参数 `calib.yaml` 文件到 FAE。
+
+### ❓ Q7.3 算法重置（algo_reset）什么时候用？
+**回答：** 用于碰撞、剧烈位姿跳变后主动让 SLAM 重新初始化。0.10.5+ Driver 已提供 `algo_reset` 接口与 demo，可由客户在异常事件触发时调用。
+
+调用方式：另起终端，进入 `$ros_workspace/src/odin_ros_driver/` 目录，执行：
+
+```bash
+./set_param.sh algo_reset 1
+```
+
+---
+
+## 八、抗冲击与工作温度
+
+### ❓ Q8.1 抗冲击数据
+**回答：**
+
+| 测试场景 | 数值 |
+|---|---|
+| 铁锤直接砸 | ≈ 32 G |
+| 流星锤甩 | 合角速度 ≈ 17.49 rad/s（≈ 2.78 圈/秒） |
+| 机器狗跳跃（第三下） | ≈ 16.8 G |
+
+> 注：超过陀螺仪量程时会输出最大量程并短暂失能，宣传抗冲击时**不要与极限振动场景混用**。
+
+### ❓ Q8.2 工作温度 / 存储温度？
+**回答：**
+
+| 项 | 范围 |
+|---|---|
+| 工作温度 | -20 °C ~ 55 °C |
+| 存储温度 | -20 °C ~ 60 °C |
+
+- 主要发热源：dTOF 与 SOC。
+- 影响因素：
+  1. 环境温度（建议 ≤ 50 °C）；
+  2. dTOF 帧率（10 Hz vs 14.5 Hz，后者发热更高）；
+  3. 场景复杂度（特征越多 SOC 计算量越大）。
+
+---
+
+## 九、帧率模式
+
+### ❓ Q9.1 高速运动场景效果差？
+**回答：** Odin1 提供 **14.5 Hz 模式**，可以提高扫描帧率，但是由于Odin为flash固态雷达，每次扫描的点云是在一个位置，所以静止状态下并不会增加分辨率或者提升扫描密度。
+
+---
+
+## 十、多机同场使用
+
+### ❓ Q10.1 同一场地能放多少台 Odin？会互相干扰吗？
+**回答：**
+- Odin1 dTOF 采用编码 / 时分等机制，**多台同场干扰较低**，已在赛事场景试验；
+- 具体最大并发数受空间密度与遮挡关系影响，建议批量部署前做现场试装；如需技术联调，联系技术支持。
+
+### ❓ Q10.2 与机械式 LiDAR 相比的差异化？
+**回答：**
+- **原理不同**：机械式 LiDAR主要靠机械转动实现360度扫描，odin1为纯固态雷达，为全局曝光；
+- **结构不同**：无机械旋转，抗振动能力更好（参见第八章）。
+
+---
+
+## 十一、系统兼容
+
+### ❓ Q11.1 Odin1 支持的系统有哪些？
+**回答：** Odin1 支持 x86 架构和 ARM 架构 Ubuntu 20.04 ROS1/ROS2、Ubuntu 22.04 ROS2 等 Linux 系统。
+
+---
+
+## 十二、售后服务
+
+### ❓ Q12.1 返修政策与维修周期？
+**回答：**
+- **返修政策**：
+  - 适配器规格内损坏（参见 Q1.1）：常规返修流程；
+  - 软件 / 配置类问题：原则上**远程协助 + 升级固件 / Driver** 即可解决，不需要回寄。
+- **维修周期**：正常维修周期为 4~5 个工作日，以售后回执为准；复杂硬件问题（如 USB 协商降级 / `lsusb` 不识别）需要工厂级排查。
+- **备用机机制**：批量项目可申请备用机；具体规则联系商务。
+
+---
+
+## 十三、标准录包命令
+
+### ❓ Q13.1 Odin1 录包命令？
+**回答：**
+
+```bash
+# ros1
+rosbag record /odin/image/compressed /odin/imu /odin/cloud_raw /odin/odometry
+
+# ros2
+ros2 bag record /odin/image/compressed /odin/imu /odin/cloud_raw /odin/odometry
+```
+
+> 注 1：需同时提供标定文件 `calib.yaml`，重定位模式需提供地图文件；  
+> 注 2：可根据问题现象，录制问题相关的话题。
+
+### ❓ Q13.2 ros2 bag 录包丢失高频话题（IMU / odometry_highfreq）？
+**回答：**
+- **现象**：低频话题（点云、图像、odometry）完整无丢，但 `/odin1/imu`（400 Hz）与 `/odin1/odometry_highfreq`（400 Hz）出现丢帧，消息间隔达到正常周期的 2 倍以上；同时 SDK 侧不报丢，独立的 `ros2 topic hz` 订阅者也看不到丢。
+- **根因**：驱动以 `RELIABLE` QoS 发布这两个话题，而 `ros2 bag record` 默认订阅为 `history = keep_last`、`depth = 10`，在 400 Hz 下只能缓冲约 25 ms。录制端一旦瞬时阻塞（落盘 flush、mcap/sqlite chunk 写入、调度抖动），订阅队列就会溢出，DDS 在**订阅端**静默丢掉最旧的样本，因此发布端与 `ros2 topic hz` 都看不到。
+- **解决方法**：录制时用 QoS override 拉大订阅队列深度，配置文件可从 [rosbag2_qos.yaml](./assets/code/rosbag2_qos.yaml) 获取：
+
+```yaml
+# rosbag2_qos.yaml
+/odin1/imu:
+  reliability: reliable
+  history: keep_last
+  depth: 4000
+
+/odin1/odometry_highfreq:
+  reliability: reliable
+  history: keep_last
+  depth: 4000
+```
+
+```shell
+ros2 bag record -a --qos-profile-overrides-path rosbag2_qos.yaml -o my_bag
+```
+
+- **套用后仍有丢包时（通常发生在慢盘上）**，可叠加以下措施：
+
+```shell
+# 换 mcap 后端 + 更大的内部缓存（比 sqlite3 快）
+ros2 bag record -s mcap --max-cache-size 1073741824 \
+    --qos-profile-overrides-path rosbag2_qos.yaml -o my_bag \
+    /odin1/imu /odin1/odometry_highfreq
+
+# 放大内核 UDP socket buffer（400 Hz RELIABLE 流量最常见的隐蔽瓶颈，默认仅 208 KB）
+sudo sysctl -w net.core.rmem_max=33554432
+sudo sysctl -w net.core.wmem_max=33554432
+```
+
+- **ROS1 是否存在同样的问题**：不存在。ROS1 使用基于 TCP 的发布/订阅，发布端与订阅端各自只有一个 `queue_size`，不存在 ROS2 那种 QoS profile 不匹配的问题；驱动 ROS1 路径已将 IMU 与 `odometry_highfreq` 的发布队列设为 4000，`rosbag record` 走 TCP 传输本身即可靠传递，无需额外配置。
+> 如本手册未涵盖您的问题，请联系技术支持并提供：① 设备 SN；② 固件 / Driver 版本；③ 完整启动日志；④ 复现 bag（建议 30 秒以上）。我们将按工单优先级响应。
