@@ -33,9 +33,6 @@ plugins:
 extra_css:
   - stylesheets/extra.css
 
-# extra_javascript:
-#   - javascripts/sidebar-collapse.js
-
 nav:
   - 首页: index.md
   - 快速上手: 
