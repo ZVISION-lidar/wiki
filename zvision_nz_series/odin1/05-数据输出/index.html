@@ -1,0 +1,2351 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="技术文档知识库">
+      
+      
+        <meta name="author" content="Administrator">
+      
+      
+      
+        <link rel="prev" href="../04-%E7%94%B5%E6%BA%90%E4%B8%8E%E8%BF%9E%E6%8E%A5/">
+      
+      
+        <link rel="next" href="../06-%E5%BB%BA%E5%9B%BE%E4%B8%8E%E9%87%8D%E5%AE%9A%E4%BD%8DAPI/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>05 数据输出 - ZVISION的Wiki文档</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="ZVISION的Wiki文档" class="md-header__button md-logo" aria-label="ZVISION的Wiki文档" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZVISION的Wiki文档
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              05 数据输出
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换暗色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换暗色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换亮色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换亮色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../quickstart/index.md" class="md-tabs__link">
+          
+  
+  
+    
+  
+  快速上手
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  产品文档
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../config/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  配置说明
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ZVISION的Wiki文档" class="md-nav__button md-logo" aria-label="ZVISION的Wiki文档" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZVISION的Wiki文档
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速上手
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    快速上手
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    None
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速开始demo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    快速开始demo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/demo/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    None
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/demo/demo1.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    demo1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/demo/demo2.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    demo2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/slam.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速开始SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品文档
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    产品文档
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Odin1
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Odin1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-cover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 封面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-reading-tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 阅读提示
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-%E4%BA%A7%E5%93%81%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 产品概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-%E7%A1%AC%E4%BB%B6%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 硬件说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 安装指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-%E7%94%B5%E6%BA%90%E4%B8%8E%E8%BF%9E%E6%8E%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 电源与连接
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 数据输出
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 数据输出
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 坐标系定义
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 外参描述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 外参描述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        外参符号说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera - LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imu-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IMU - LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        其它
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 内参说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 内参说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-odin1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 Odin1 相机内参
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 相机模型描述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3.2 相机模型描述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#odin1-rgb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Odin1 RGB 相机模型与内参
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 相机投影模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 多项式鱼眼模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 多项式鱼眼模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 投影公式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 仿射变换
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参数说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 去畸变后的针孔模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 坐标系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 工程注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 数据说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 数据说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#541-odin1cloud_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.1 点云数据（/odin1/cloud_raw）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#542-odin1tf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.2 坐标变换数据（/odin1/tf）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-ros-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 数据输出类型及 ROS Driver 获取链接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-%E5%BB%BA%E5%9B%BE%E4%B8%8E%E9%87%8D%E5%AE%9A%E4%BD%8DAPI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 建图与重定位API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-Odin1-Ubuntu%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 Ubuntu快速启动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-OdinViewer-Windows%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    08 Windows快速启动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-%E5%9B%BA%E4%BB%B6%E5%8D%87%E7%BA%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    09 固件升级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-%E9%87%8D%E5%AE%9A%E4%BD%8D%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 重定位使用说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-%E9%87%8D%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9B%BE%E8%8E%B7%E5%8F%96/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11 重定位地图获取
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12 时间同步
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-%E7%BB%B4%E6%8A%A4%E4%B8%8E%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13 维护与故障排除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-%E6%8A%80%E6%9C%AF%E5%8F%82%E6%95%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14 技术参数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98FAQ/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    15 常见问题FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99-%E5%85%B3%E6%B3%A8%E6%88%91%E4%BB%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99 关注我们
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    配置说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 坐标系定义
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 外参描述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 外参描述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        外参符号说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera - LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imu-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IMU - LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        其它
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 内参说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 内参说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-odin1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 Odin1 相机内参
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 相机模型描述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3.2 相机模型描述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#odin1-rgb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Odin1 RGB 相机模型与内参
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 相机投影模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 多项式鱼眼模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 多项式鱼眼模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 投影公式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 仿射变换
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参数说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 去畸变后的针孔模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 坐标系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 工程注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 数据说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 数据说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#541-odin1cloud_raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.1 点云数据（/odin1/cloud_raw）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#542-odin1tf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.2 坐标变换数据（/odin1/tf）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-ros-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 数据输出类型及 ROS Driver 获取链接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<!-- 已从 Odin1 Jekyll 文档站迁移，图片/PDF/数模资源待手动补齐 -->
+<h1 id="5">5. 数据输出</h1>
+<h2 id="51">5.1 坐标系定义</h2>
+<p>Odin 1直角坐标的定义如下图所示，<strong>I</strong> 为imu坐标系，<strong>L</strong>为点云坐标系， <strong>C</strong>为相机坐标系。</p>
+<!-- TODO: 图片资源未迁移（原 Jekyll assets/ 路径），稍后手动补图或上传到 docs/zvision_nz_series/odin1/assets/
+![原图占位]\(assets/img/coordinate.png\)-->
+<!-- TODO: 图片资源未迁移（原 Jekyll assets/ 路径），稍后手动补图或上传到 docs/zvision_nz_series/odin1/assets/
+![原图占位]\(assets/img/structure2.png\)-->
+<!-- TODO: 图片资源未迁移（原 Jekyll assets/ 路径），稍后手动补图或上传到 docs/zvision_nz_series/odin1/assets/
+![原图占位]\(assets/img/structure1.png\)-->
+
+<h2 id="52">5.2 外参描述</h2>
+<h3 id="_1">外参符号说明</h3>
+<p>下面使用 $$\mathbf{T}^{\text{A}}_{\text{B}}$$ 来表示坐标转换，具体含义为:</p>
+<p>$$
+\mathbf{P}<em _text_B="\text{B">{\text{A}} = \mathbf{T}^{\text{A}}</em>
+$$}} \cdot \mathbf{P}_{\text{B}</p>
+<p>其中 $$P_A$$ 和 $$P_B$$ 分别表示物体在A坐标系和B坐标系下坐标。</p>
+<h3 id="camera-lidar">Camera - LiDAR</h3>
+<p>外参 $$\mathbf{T}^{\text{camera}}_{\text{lidar}}$$  不同机器存在差异，请在驱动程序启动后，在config/calib.yaml获取（Tcl_0），具体信息请查看驱动。</p>
+<h3 id="imu-lidar">IMU - LiDAR</h3>
+<p>外参 $$\mathbf{T}^{\text{imu}}_{\text{lidar}}$$  是固定值，数值如下：</p>
+<p>$$
+\mathbf{T}^{\text{imu}}_{\text{lidar}} =
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; -0.02663 \
+0 &amp; 1 &amp; 0 &amp; 0.03447 \
+0 &amp; 0 &amp; 1 &amp; 0.02174 \
+0      &amp; 0      &amp; 0      &amp; 1
+\end{bmatrix}
+$$</p>
+<h3 id="_2">其它</h3>
+<ul>
+<li>如果需要 Camera 到 IMU 的外参，可由上述两个外参推导得到。</li>
+</ul>
+<p>由 $$\mathbf{P}<em _text_lidar="\text{lidar">{\text{camera}} = \mathbf{T}^{\text{camera}}</em>}} \cdot \mathbf{P<em _text_imu="\text{imu">{\text{lidar}}$$ 与 $$\mathbf{P}</em>}} = \mathbf{T}^{\text{imu}<em _text_lidar="\text{lidar">{\text{lidar}} \cdot \mathbf{P}</em>$$ 得：}}$$，消去 $$\mathbf{P}_{\text{lidar}</p>
+<p>$$
+\mathbf{T}^{\text{camera}}<em _text_lidar="\text{lidar">{\text{imu}} = \mathbf{T}^{\text{camera}}</em>
+$$}} \cdot \left(\mathbf{T}^{\text{imu}}_{\text{lidar}}\right)^{-1</p>
+<p>其中 $$\mathbf{T}^{\text{camera}}<em _text_lidar="\text{lidar">{\text{lidar}}$$ 取自 <code>config/calib.yaml</code> 的 <code>Tcl_0</code>，$$\mathbf{T}^{\text{imu}}</em>$$ 为上述固定值。}</p>
+<h2 id="53">5.3 内参说明</h2>
+<p>内参我们主要讨论相机的内参，lidar的内参不考虑</p>
+<h3 id="531-odin1">5.3.1 Odin1 相机内参</h3>
+<ul>
+<li>获取内参的方法：连接设备，运行驱动，会在/ws/src/odin1_ros_driver/config中生成calib.yaml文件，每个设备略有不同</li>
+<li>calib.yaml内容如下：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1">#O1-P010100079</span>
+cam_num:<span class="w"> </span><span class="m">1</span>
+img_topic_0:<span class="w"> </span>/camera/rgb
+Tcl_0:<span class="w"> </span><span class="o">[</span>
+-0.00745,<span class="w"> </span>-0.99997,<span class="w"> </span>-0.00018,<span class="w"> </span><span class="m">0</span>.03127,
+-0.00938,<span class="w"> </span><span class="m">0</span>.00025,<span class="w"> </span>-0.99996,<span class="w"> </span><span class="m">0</span>.01817,
+<span class="m">0</span>.99993,<span class="w"> </span>-0.00745,<span class="w"> </span>-0.00938,<span class="w"> </span>-0.00955,
+<span class="m">0</span>,<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="m">1</span>
+<span class="o">]</span>
+
+cam_0:
+<span class="w">  </span>cam_model:<span class="w"> </span>FishPoly
+<span class="w">  </span>image_width:<span class="w"> </span><span class="m">1600</span><span class="w">  </span><span class="c1"># 1920</span>
+<span class="w">  </span>image_height:<span class="w"> </span><span class="m">1296</span><span class="w">  </span><span class="c1"># 1080</span>
+<span class="w">  </span>k2:<span class="w"> </span><span class="m">5</span>.0379242441551616e-05
+<span class="w">  </span>k3:<span class="w"> </span>-7.4415257914767799e-03
+<span class="w">  </span>k4:<span class="w"> </span>-4.1365539417288134e-02
+<span class="w">  </span>k5:<span class="w"> </span><span class="m">5</span>.5346546592564667e-02
+<span class="w">  </span>k6:<span class="w"> </span>-3.3479736619860797e-02
+<span class="w">  </span>k7:<span class="w"> </span><span class="m">5</span>.9355751390599035e-03
+<span class="w">  </span>p1:<span class="w"> </span><span class="m">0</span>.
+<span class="w">  </span>p2:<span class="w"> </span><span class="m">0</span>.
+<span class="w">  </span>A11:<span class="w"> </span><span class="m">7</span>.3735683773268692e+02
+<span class="w">  </span>A12:<span class="w"> </span>-4.0977897450998052e-01
+<span class="w">  </span>A22:<span class="w"> </span><span class="m">7</span>.3729158717678535e+02
+<span class="w">  </span>u0:<span class="w"> </span><span class="m">7</span>.9437192080462398e+02
+<span class="w">  </span>v0:<span class="w"> </span><span class="m">6</span>.6625886729029014e+02
+<span class="w">  </span>isFast:<span class="w"> </span><span class="m">0</span>
+<span class="w">  </span>numDiff:<span class="w"> </span><span class="m">3000</span>
+<span class="w">  </span>maxIncidentAngle:<span class="w"> </span><span class="m">120</span>
+</code></pre></div>
+<h3 id="532">5.3.2 相机模型描述</h3>
+<h4 id="odin1-rgb">Odin1 RGB 相机模型与内参</h4>
+<p>本文档描述 Odin1 RGB 相机的投影模型及内参参数，供工程参考。</p>
+<hr />
+<h4 id="1">1 相机投影模型</h4>
+<p>Odin1 RGB 使用的是<strong>等距投影（Equidistant）</strong> + <strong>全阶连续多项式畸变模型</strong>。
+参考：
+- https://github.com/manifoldsdk/odin_ros_driver/blob/main/include/polynomial_camera.hpp
+- https://github.com/gaowenliang/camera_model/blob/master/include/camera_model/camera_models/PolyFisheyeCamera.h</p>
+<p>说明：该模型与 OpenCV <code>cv2.fisheye</code>（Kannala-Brandt）参数化形式不同，不能直接等价替换。</p>
+<p>去畸变后，该模型可简化为标准<strong>针孔模型</strong>。</p>
+<hr />
+<h4 id="2">2 多项式鱼眼模型</h4>
+<h5 id="21">2.1 投影公式</h5>
+<p>给定相机坐标系下的三维点：</p>
+<p>$$
+\mathbf{P_c} = (X, Y, Z)^T
+$$</p>
+<p>计算入射半径：</p>
+<p>$$
+r = \sqrt{X^2 + Y^2}
+$$</p>
+<p>计算入射角：</p>
+<p>$$
+\theta = \arccos\left(\frac{Z}{|\mathbf{P_c}|}\right) = \arccos\left(\frac{Z}{\sqrt{X^2 + Y^2 + Z^2}}\right)
+$$</p>
+<p>多项式径向映射（注意包含 $\theta$ 线性项）：</p>
+<p>$$
+\theta_d = \theta + k_2\theta^2 + k_3\theta^3 + k_4\theta^4 + k_5\theta^5 + k_6\theta^6 + k_7\theta^7
+$$</p>
+<p>投影到畸变平面：</p>
+<p>$$
+x_d = \frac{\theta_d}{r} \cdot X
+$$</p>
+<p>$$
+y_d = \frac{\theta_d}{r} \cdot Y
+$$</p>
+<hr />
+<h5 id="22">2.2 仿射变换</h5>
+<p>$$
+\begin{bmatrix}
+u \
+v
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_{11} &amp; A_{12} \
+0 &amp; A_{22}
+\end{bmatrix}
+\begin{bmatrix}
+x_d \
+y_d
+\end{bmatrix}
++
+\begin{bmatrix}
+u_0 \
+v_0
+\end{bmatrix}
+$$</p>
+<h5 id="_3">参数说明</h5>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k2–k7</td>
+<td>多项式畸变系数</td>
+</tr>
+<tr>
+<td>A11</td>
+<td>X 轴焦距（水平缩放）</td>
+</tr>
+<tr>
+<td>A12</td>
+<td>非正交补偿（skew）</td>
+</tr>
+<tr>
+<td>A22</td>
+<td>Y 轴焦距（垂直缩放）</td>
+</tr>
+<tr>
+<td>u0, v0</td>
+<td>主点坐标</td>
+</tr>
+</tbody>
+</table>
+<p>切向畸变未建模：</p>
+<p>$$
+p_1 = p_2 = 0
+$$</p>
+<hr />
+<h3 id="23">2.3 去畸变后的针孔模型</h3>
+<p>去畸变后：</p>
+<p>$$
+u = f_x \frac{X}{Z} + c_x
+$$</p>
+<p>$$
+v = f_y \frac{Y}{Z} + c_y
+$$</p>
+<p>内参矩阵：</p>
+<p>$$
+K =
+\begin{bmatrix}
+f_x &amp; 0 &amp; c_x \
+0 &amp; f_y &amp; c_y \
+0 &amp; 0 &amp; 1
+\end{bmatrix}
+$$</p>
+<p>去畸变后畸变系数为零。</p>
+<hr />
+<h3 id="24">2.4 坐标系</h3>
+<p>Odin1 RGB 遵循 OpenCV 相机坐标系约定：</p>
+<ul>
+<li>X → 右</li>
+<li>Y → 下</li>
+<li>Z → 前</li>
+</ul>
+<p>右手坐标系。</p>
+<hr />
+<h3 id="25">2.5 工程注意事项</h3>
+<ul>
+<li>去畸变不改变外参。</li>
+<li>高精度重投影请使用多项式鱼眼模型。</li>
+<li>检测、SLAM、融合等算法框架请使用去畸变后的针孔模型。</li>
+<li>当 $\theta \to 0$ 时可能出现数值不稳定（$r \to 0$ 导致除零）。</li>
+</ul>
+<hr />
+<h3 id="26">2.6 总结</h3>
+<p>Odin1 RGB 相机模型由以下两部分组成：</p>
+<ol>
+<li><strong>多项式鱼眼投影</strong>（原始模型）</li>
+<li><strong>去畸变针孔表示</strong>（算法兼容模型）</li>
+</ol>
+<p>请根据应用场景选择合适的模型。</p>
+<h2 id="54">5.4 数据说明</h2>
+<h3 id="541-odin1cloud_raw">5.4.1 点云数据（/odin1/cloud_raw）</h3>
+<ul>
+<li>raw point cloud(odin1/cloud_raw) has the following fields:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>float32<span class="w"> </span>x<span class="w">             </span>//<span class="w"> </span>X<span class="w"> </span>axis,<span class="w"> </span><span class="k">in</span><span class="w"> </span>meters
+float32<span class="w"> </span>y<span class="w">             </span>//<span class="w"> </span>Y<span class="w"> </span>axis,<span class="w"> </span><span class="k">in</span><span class="w"> </span>meters
+float32<span class="w"> </span>z<span class="w">             </span>//<span class="w"> </span>Z<span class="w"> </span>axis,<span class="w"> </span><span class="k">in</span><span class="w"> </span>meters
+uint8<span class="w">  </span>intensity<span class="w">      </span>//<span class="w"> </span>Reflectivity,<span class="w"> </span>range<span class="w"> </span><span class="m">0</span>–255
+uint16<span class="w"> </span>confidence<span class="w">     </span>//<span class="w"> </span>Point<span class="w"> </span>confidence,<span class="w"> </span>actual<span class="w"> </span>value<span class="w"> </span>range<span class="w"> </span>from<span class="w"> </span><span class="m">0</span><span class="w"> </span>to<span class="w"> </span>around<span class="w"> </span><span class="m">1300</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>typical<span class="w"> </span>scene,<span class="w"> </span>higher<span class="w"> </span>value<span class="w"> </span>means<span class="w"> </span>more<span class="w"> </span>reliable.<span class="w"> </span>Recommanded<span class="w"> </span>filtering<span class="w"> </span>threshold<span class="w"> </span>is<span class="w"> </span><span class="m">30</span>-35,<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>adjusted<span class="w"> </span>accordingly.
+float32<span class="w"> </span>offset_time<span class="w">   </span>//<span class="w"> </span>Time<span class="w"> </span>offset<span class="w"> </span>relative<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>base<span class="w"> </span>timestamp<span class="w"> </span>unit:<span class="w"> </span>s<span class="w"> </span>
+</code></pre></div>
+<h3 id="542-odin1tf">5.4.2 坐标变换数据（/odin1/tf）</h3>
+<p><code>/odin1/tf</code> 发布设备各坐标系之间的变换关系：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">变换</th>
+<th style="text-align: center;">含义</th>
+<th style="text-align: center;">frame_id</th>
+<th style="text-align: center;">child_frame_id</th>
+<th style="text-align: center;">频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">odom → imu</td>
+<td style="text-align: center;">IMU 在 odom 系下的实时位姿</td>
+<td style="text-align: center;">odom</td>
+<td style="text-align: center;">imu</td>
+<td style="text-align: center;">10 Hz</td>
+</tr>
+<tr>
+<td style="text-align: center;">imu → lidar</td>
+<td style="text-align: center;">IMU-LiDAR 外参 $$\mathbf{T}^{\text{imu}}<em imu="imu">{\text{lidar}}$$（将 LiDAR 系坐标变换到 IMU 系，即 $$P</em>} = \mathbf{T}^{\text{imu}<em lidar="lidar">{\text{lidar}} \cdot P</em>$$）</td>
+<td style="text-align: center;">imu</td>
+<td style="text-align: center;">lidar</td>
+<td style="text-align: center;">10 Hz</td>
+</tr>
+<tr>
+<td style="text-align: center;">odom → camera</td>
+<td style="text-align: center;">相机在 odom 系下的实时位姿</td>
+<td style="text-align: center;">odom</td>
+<td style="text-align: center;">camera</td>
+<td style="text-align: center;">10 Hz</td>
+</tr>
+<tr>
+<td style="text-align: center;">odom → map</td>
+<td style="text-align: center;">重定位模式下 map 系与 odom 系的关系</td>
+<td style="text-align: center;">odom</td>
+<td style="text-align: center;">map</td>
+<td style="text-align: center;">&lt; 10 Hz</td>
+</tr>
+</tbody>
+</table>
+<p>说明：</p>
+<ul>
+<li>tf 链为 <code>odom → imu → lidar</code>，另有 <code>odom → camera</code> 一条分支。IMU 系是设备的本体基准系，接入 ROS 时可直接将其视为 <code>base_link</code>，或自行发布一条 <code>base_link → imu</code> 的静态变换。</li>
+<li><code>odom → imu</code>、<code>imu → lidar</code> 与 <code>odom → camera</code> 由参数 <code>send_odom_baselink_tf</code> 控制，关闭后不发布。</li>
+<li>默认按里程计频率（10 Hz）发布；当 <code>tf_extra_publish_rate</code> 大于 0 时，驱动会按该频率补发 <code>odom → imu</code> 与 <code>imu → lidar</code>，并对每帧里程计之后的 200 ms 做突发预发布，避免点云时间戳超前于里程计时 tf2 无法插值。</li>
+<li><code>imu → lidar</code> 携带的是设备标定外参 $$\mathbf{T}^{\text{imu}}_{\text{lidar}}$$（即 <code>body_T_lidar</code>，对应 §5.2 固定值矩阵），数值固定不变，以固定频率重复发布，便于订阅端随时获取。</li>
+<li><code>odom → camera</code> 由里程计位姿与两组外参计算得到，相机系遵循 OpenCV 光学约定（X 右、Y 下、Z 前）。</li>
+<li><code>odom → map</code> 仅在<strong>重定位模式</strong>（<code>custom_map_mode = 2</code>）下、重定位成功后发布。注意其父子关系为 <code>odom → map</code>，与 ROS 常见的 <code>map → odom</code> 约定相反，接入导航栈时需自行取逆后重新广播。</li>
+<li>外参的符号约定与具体数值参见 <a href="#52-外参描述">5.2 外参描述</a>。</li>
+</ul>
+<h2 id="55-ros-driver">5.5 数据输出类型及 ROS Driver 获取链接</h2>
+<ul>
+<li><a href="https://github.com/manifoldsdk/odin_ros_driver">odin_ros_driver</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
