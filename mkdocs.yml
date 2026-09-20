@@ -56,18 +56,16 @@ nav:
           -  SLAM 启动:
               -  FASTLIO2 使用说明: zvision_nz_series/NZ1/SLAM/01-FASTLIO2使用说明.md
               -  SuperLIO2 使用说明: zvision_nz_series/NZ1/SLAM/02-SuperLIO2使用说明.md
-          -  建图与重定位API: zvision_nz_series/NZ1/06-建图与重定位API.md
-          -  Ubuntu快速启动: zvision_nz_series/NZ1/07-NZ1-Ubuntu快速启动.md
-          -  Windows快速启动: zvision_nz_series/NZ1/08-NZ1-Viewer-Windows快速启动.md
-          -  固件升级: zvision_nz_series/NZ1/09-固件升级.md
-          -  重定位使用说明: zvision_nz_series/NZ1/10-重定位使用说明.md
-          -  重定位地图获取: zvision_nz_series/NZ1/11-重定位地图获取.md
-          -  时间同步: zvision_nz_series/NZ1/12-时间同步.md
+          -  Ubuntu快速启动: zvision_nz_series/NZ1/06-Ubuntu快速启动.md
+          -  Windows快速启动: zvision_nz_series/NZ1/07-Windows快速启动.md
+          -  固件升级: zvision_nz_series/NZ1/08-固件升级.md
+          -  时间同步: zvision_nz_series/NZ1/09-时间同步.md
           -  维护与故障排除: zvision_nz_series/NZ1/13-维护与故障排除.md
           -  技术参数: zvision_nz_series/NZ1/14-技术参数.md
           -  常见问题FAQ: zvision_nz_series/NZ1/15-常见问题FAQ.md
           -  关注我们: zvision_nz_series/NZ1/关注我们.md
   - 配置说明: config.md
+  - Git 更新流程: GIT_WORKFLOW.md
 
 markdown_extensions:
   - admonition
