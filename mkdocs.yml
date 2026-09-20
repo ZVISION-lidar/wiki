@@ -36,34 +36,37 @@ extra_css:
 nav:
   - 首页: index.md
   - 快速上手:
-      - quickstart/index.md
+      - zvision_nz_series/quickstart.md
       - 快速开始demo:
-          - quickstart/demo/index.md
-          - demo1: quickstart/demo/demo1.md
-          - demo2: quickstart/demo/demo2.md
-      - 快速开始SLAM: quickstart/slam.md
+          - zvision_nz_series/demo/index.md
+          - demo1: zvision_nz_series/demo/demo1.md
+          - demo2: zvision_nz_series/demo/demo2.md
+      - 快速开始SLAM: zvision_nz_series/slam.md
   - 产品文档:
       - ZVISION NZ 系列: zvision_nz_series/index.md
-      - Odin1:
-          - 产品总览: zvision_nz_series/odin1/index.md
-          - 00 封面: zvision_nz_series/odin1/00-cover.md
-          - 00 阅读提示: zvision_nz_series/odin1/00-reading-tips.md
-          - 01 产品概述: zvision_nz_series/odin1/01-产品概述.md
-          - 02 硬件说明: zvision_nz_series/odin1/02-硬件说明.md
-          - 03 安装指南: zvision_nz_series/odin1/03-安装指南.md
-          - 04 电源与连接: zvision_nz_series/odin1/04-电源与连接.md
-          - 05 数据输出: zvision_nz_series/odin1/05-数据输出.md
-          - 06 建图与重定位API: zvision_nz_series/odin1/06-建图与重定位API.md
-          - 07 Ubuntu快速启动: zvision_nz_series/odin1/07-Odin1-Ubuntu快速启动.md
-          - 08 Windows快速启动: zvision_nz_series/odin1/08-OdinViewer-Windows快速启动.md
-          - 09 固件升级: zvision_nz_series/odin1/09-固件升级.md
-          - 10 重定位使用说明: zvision_nz_series/odin1/10-重定位使用说明.md
-          - 11 重定位地图获取: zvision_nz_series/odin1/11-重定位地图获取.md
-          - 12 时间同步: zvision_nz_series/odin1/12-时间同步.md
-          - 13 维护与故障排除: zvision_nz_series/odin1/13-维护与故障排除.md
-          - 14 技术参数: zvision_nz_series/odin1/14-技术参数.md
-          - 15 常见问题FAQ: zvision_nz_series/odin1/15-常见问题FAQ.md
-          - 99 关注我们: zvision_nz_series/odin1/99-关注我们.md
+      - NZ1:
+          - 产品总览: zvision_nz_series/NZ1/index.md
+          -  用户手册: zvision_nz_series/NZ1/cover.md
+          -  阅读提示: zvision_nz_series/NZ1/00-reading-tips.md
+          -  产品概述: zvision_nz_series/NZ1/01-产品概述.md
+          -  硬件说明: zvision_nz_series/NZ1/02-硬件说明.md
+          -  安装指南: zvision_nz_series/NZ1/03-安装指南.md
+          -  电源与连接: zvision_nz_series/NZ1/04-电源与连接.md
+          -  数据输出: zvision_nz_series/NZ1/05-数据输出.md
+          -  SLAM 启动:
+              -  FASTLIO2 使用说明: zvision_nz_series/NZ1/SLAM/01-FASTLIO2使用说明.md
+              -  SuperLIO2 使用说明: zvision_nz_series/NZ1/SLAM/02-SuperLIO2使用说明.md
+          -  建图与重定位API: zvision_nz_series/NZ1/06-建图与重定位API.md
+          -  Ubuntu快速启动: zvision_nz_series/NZ1/07-NZ1-Ubuntu快速启动.md
+          -  Windows快速启动: zvision_nz_series/NZ1/08-NZ1-Viewer-Windows快速启动.md
+          -  固件升级: zvision_nz_series/NZ1/09-固件升级.md
+          -  重定位使用说明: zvision_nz_series/NZ1/10-重定位使用说明.md
+          -  重定位地图获取: zvision_nz_series/NZ1/11-重定位地图获取.md
+          -  时间同步: zvision_nz_series/NZ1/12-时间同步.md
+          -  维护与故障排除: zvision_nz_series/NZ1/13-维护与故障排除.md
+          -  技术参数: zvision_nz_series/NZ1/14-技术参数.md
+          -  常见问题FAQ: zvision_nz_series/NZ1/15-常见问题FAQ.md
+          -  关注我们: zvision_nz_series/NZ1/关注我们.md
   - 配置说明: config.md
 
 markdown_extensions:

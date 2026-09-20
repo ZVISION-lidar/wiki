@@ -1,4 +1,3 @@
-<!-- 已从 Odin1 Jekyll 文档站迁移，图片/PDF/数模资源待手动补齐 -->
 # 6. 建图与重定位建议调用流程
 
 ## 6.1 文档说明
@@ -7,12 +6,12 @@
 
 ## 6.2 概念说明
 
-- **设备**：Odin1 设备
-- **主机**：连接 Odin1 并运行上位机调用 API 的设备
-- **设备运行模式**：Odin1 提供【算法】和【传感器】两种主要运行模式
+- **设备**：NZ1 设备
+- **主机**：连接 NZ1 并运行上位机调用 API 的设备
+- **设备运行模式**：NZ1 提供【算法】和【传感器】两种主要运行模式
 - **传感器运行模式**：设备仅上传所有传感器原始数据
-- **算法运行模式**：Odin1 设备内部算法的运行模式，分别是里程计模式、SLAM 模式、和重定位模式
-- **地图文件**：Odin1 内部算法在 SLAM 模式下生成的特殊格式地图文件
+- **算法运行模式**：NZ1 设备内部算法的运行模式，分别是里程计模式、SLAM 模式、和重定位模式
+- **地图文件**：NZ1 内部算法在 SLAM 模式下生成的特殊格式地图文件
 
 ## 6.3 整体流程
 
@@ -36,7 +35,7 @@ lidar_get_version(device_handle device);
 lidar_get_calib_file(device_handle device, const char* path);
 
 // 注册数据回调
-lidar_register_stream_callback(odinDevice, data_callback_info);
+lidar_register_stream_callback(NZDevice, data_callback_info);
 
 // 初始化设备
 lidar_open_device(device_handle device);
@@ -49,8 +48,8 @@ lidar_open_device(device_handle device);
 // 设备运行期间产生的加密日志会持续写入 dest_dir 指定的目录
 // dest_dir 必须是已存在的目录，建议每次连接使用独立子目录便于归档
 
-const char* dest_dir = "/home/user/odin_logs/Conn_20260610_101530";
-int ret = lidar_enable_encrypted_device_log(odinDevice, dest_dir);
+const char* dest_dir = "/home/user/NZ_logs/Conn_20260610_101530";
+int ret = lidar_enable_encrypted_device_log(NZDevice, dest_dir);
 // 返回 0 表示开启成功，-1 表示失败
 
 // 不需要"关闭日志"接口；不调用本 API 即不启用日志
@@ -71,7 +70,7 @@ int ret = lidar_enable_encrypted_device_log(odinDevice, dest_dir);
 ```cpp
 // 使能内部算法
 int type = LIDAR_MODE_SLAM;
-lidar_set_mode(odinDevice, type);
+lidar_set_mode(NZDevice, type);
 
 // 配置算法运行模式至 SLAM 模式: 将 "map_mode" 参数设置为 1
 // "map_mode" 设置不同的值对应分别为
@@ -95,7 +94,7 @@ lidar_set_custom_parameter(device_handle device, const char* param_name, const v
 
 // 查询建图文件是否保存完成：读取到 "save_map" 参数由 1 变 0
 int value = 0;
-int result = lidar_get_custom_parameter(odinDevice, "save_map", &value);
+int result = lidar_get_custom_parameter(NZDevice, "save_map", &value);
 
 // 当设备内部地图保存完成后，获取设备中的地图文件至主机
 lidar_get_mapping_result(device_handle device, const char* dest_dir, const char* file_name);
@@ -108,7 +107,7 @@ lidar_get_mapping_result(device_handle device, const char* dest_dir, const char*
 ```cpp
 // 将设备切换到传感器模式，保留原始传感器输出，关闭内部算法
 int type = LIDAR_MODE_RAW;
-lidar_set_mode(odinDevice, type);
+lidar_set_mode(NZDevice, type);
 
 // 如需完全停止内部算法和数据输出，调用以下 api
 // lidar_stop_stream(device_handle device, int type);
@@ -118,7 +117,7 @@ lidar_set_mode(odinDevice, type);
 
 ## 6.4.6 重定位说明
 
-该模式要求 Odin1 在 SLAM 模式生成并上传的地图文件，用于传入设备运行重定位。
+该模式要求 NZ1 在 SLAM 模式生成并上传的地图文件，用于传入设备运行重定位。
 
 ## 6.4.7 重定位：设备连接 & 初始化状态下，开始重定位
 
@@ -142,7 +141,7 @@ lidar_start_stream(device_handle device, int type, uint32_t &dtof_subframe_odr);
 ```cpp
 // 将设备切换到传感器模式，保留原始传感器输出，关闭内部算法
 int type = LIDAR_MODE_RAW;
-lidar_set_mode(odinDevice, type);
+lidar_set_mode(NZDevice, type);
 
 // 如需完全停止内部算法和数据输出，调用以下 api
 // lidar_stop_stream(device_handle device, int type);
@@ -151,7 +150,8 @@ lidar_set_mode(odinDevice, type);
 ```
 
 ## 6.5 流程图总结
-![流程图总结](./assets/img/第六章流程图总结.png)
+
+<!-- TODO: 图片资源待补齐（原 assets/img/第六章流程图总结.png）-->
 
 ## 6.6 注意事项
 

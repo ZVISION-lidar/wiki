@@ -1,18 +1,17 @@
-<!-- 已从 Odin1 Jekyll 文档站迁移，图片/PDF/数模资源待手动补齐 -->
 # 15. 常见问题 FAQ
 
-> 适用产品：Odin1  
-> 配套软件：ROS Driver、MindCloud Studio  
+> 适用产品：NZ1
+> 配套软件：ROS Driver、MindCloud Studio
 
 > 录制bag包规范：
 - 设置use_host_ros_time: 0
 - ros2录制bag包之前，请使用QoS进行录包，可以尽可能的减少丢包几率。使用方法如下：
 
-> ```ros2 bag record /odin1/cloud_raw /odin1/imu /odin1/odometry /odin1/tf  /odin1/image/compressed --qos-profile-overrides-path rosbag2_qos.yaml  ```
+> ```ros2 bag record /NZ1/cloud_raw /NZ1/imu /NZ1/odometry /NZ1/tf  /NZ1/image/compressed --qos-profile-overrides-path rosbag2_qos.yaml  ```
 
 > [rosbag2_qos.yaml文件获取](./assets/code/rosbag2_qos.yaml)
 
-<p style="font-size: 12px; color: #9a9a9a; line-height: 1.7; margin-top: 1em;">免责声明：Odin1 输出的 odometry / 定位结果仅供客户上层应用参考，我司不对基于该数据的判断与运行结果承担责任。在无人机、特种作业等对定位连续性要求较高的场景中，里程计漂移可能导致炸机、设备损坏等后果，相关风险需由使用方自行评估。我们无法保证 Odin1 适配所有场景，请在直接使用其输出结果前充分完成场景化测试，并做好安全冗余设计（如失效保护、多传感器融合）。</p>
+<p style="font-size: 12px; color: #9a9a9a; line-height: 1.7; margin-top: 1em;">免责声明：NZ1 输出的 odometry / 定位结果仅供客户上层应用参考，我司不对基于该数据的判断与运行结果承担责任。在无人机、特种作业等对定位连续性要求较高的场景中，里程计漂移可能导致炸机、设备损坏等后果，相关风险需由使用方自行评估。我们无法保证 NZ1 适配所有场景，请在直接使用其输出结果前充分完成场景化测试，并做好安全冗余设计（如失效保护、多传感器融合）。</p>
 
 ---
 
@@ -34,13 +33,13 @@
      - 正常情况：SYNC 引脚降压在 0.9V 左右（新版供电线取消SYNC线输出），GPIO 引脚降压在 1.3V 左右；
      - 异常情况：低于 0.6V 或者不显示压降证明芯片内部烧坏，请联系售后。
 
-### ❓ Q1.3 Odin1 连接到电脑后运行驱动没有数据
+### ❓ Q1.3 NZ1 连接到电脑后运行驱动没有数据
 **回答：**
 - 请检查设备是否供电正常，正常供电红灯常亮；
 - 输入 `lsusb` 查看设备是否被识别，设备 id：`2207:0019`；
-- 检查 `/etc/udev/rules.d/99-odin1.rules` 文件是否存在，如果不存在请手动创建，存在则检查文件内容是否正确；
+- 检查 `/etc/udev/rules.d/99-NZ1.rules` 文件是否存在，如果不存在请手动创建，存在则检查文件内容是否正确；
 - 重启 udev 服务：`sudo udevadm control --reload-rules && sudo udevadm trigger`；
-- 检查驱动中的 Log 信息是否出现版本过低的提示字样，如果有请更新固件，更新方法见 [固件升级](09-固件升级.md)。
+- 检查驱动中的 Log 信息是否出现版本过低的提示字样，如果有请更新固件，更新方法见 [固件升级](9.%20Firmware%20Upgrade)。
 - 如果之前可以正常使用，使用过程中提示`start listening usb event, further connection should be handleed by hotplug_callback`，一般这种情况是脚本启动驱动，后台仍存在节点在运行，需要将后台节点杀掉后重新插拔USB，重新启动驱动。**杀进程时务必使用 SIGINT / SIGTERM 让驱动走清理流程释放 USB，详见 [Q2.7](#-q27-启动驱动报-failed-to-claim-interface-0-libusb_error_busy--提示-further-connection-should-be-handled-by-hotplug_callback)，否则下一次启动会出现 `LIBUSB_ERROR_BUSY`。**
 
 ### ❓ Q1.4 线材与航插选型？
@@ -55,7 +54,7 @@
 
 ### ❓ Q2.1 USB 频繁报 `heartBeat timeout` / `waiting for device connecting` / 需要掉电重启？
 **回答：** 建议排查顺序：
-1. **USB 集线器负载**：避免 Odin 与多台高带宽设备共享同一 USB 2.0 hub。建议 Odin1 独占总线，或在系统启动时**最后上电 Odin**，让其握手更稳定；
+1. **USB 集线器负载**：避免 NZ1 与多台高带宽设备共享同一 USB 2.0 hub。建议 NZ1 独占总线，或在系统启动时**最后上电 NZ1**，让其握手更稳定；
 2. **驱动版本**：升级到最新 ROS Driver（v0.10.5 及以上）；
 3. **重定位地图配置**：确认地图文件路径正确，且地图与算法版本匹配，即使用最新版的驱动采集地图或使用最新版的 MindCloud 处理地图；
 4. **主机算力**：弱算力平台（如部分边缘计算盒）CPU 长期满载会导致心跳漏帧，建议预留资源。
@@ -83,7 +82,7 @@
 - **OpenCV**：ROS1 同时存在 4.2 / 4.5 时部分系统会冲突。建议按 README 强制安装单一版本；或者使用 docker 进行环境隔离；
 - **libusb**：可临时通过调整 `LD_LIBRARY_PATH` 优先加载系统兼容版本规避。
 
-### ❓ Q2.6 Odin1 和 RTK 一起使用时，RTK 无法固定？
+### ❓ Q2.6 NZ1 和 RTK 一起使用时，RTK 无法固定？
 **回答：**
 - USB 3.0 在工作时会产生宽频带电磁辐射，其中包含 GNSS L1 频段（1575.42 MHz）附近的噪声；
 - 建议降级为 USB 2.0 或者使用屏蔽更好的连接线。
@@ -169,8 +168,8 @@ cleanup_old
 
 # === 然后再正常启动 ===
 source /opt/ros/humble/setup.bash
-source ~/odin_ws/install/setup.bash
-ros2 launch odin_ros_driver odin1_ros2.launch.py
+source ~/NZ_ws/install/setup.bash
+ros2 launch NZ_ros_driver NZ1_ros2.launch.py
 ```
 
 要点：
@@ -186,7 +185,7 @@ ros2 launch odin_ros_driver odin1_ros2.launch.py
 sudo usbreset 2207:0019
 # 或：sudo usbreset /dev/bus/usb/<bus>/<device>
 
-# 方法 B：物理重新插拔 Odin1 USB 线
+# 方法 B：物理重新插拔 NZ1 USB 线
 ```
 
 按上述脚本改造后，`failed to claim interface 0: LIBUSB_ERROR_BUSY` 基本不会再出现。
@@ -226,7 +225,7 @@ echo "options usbcore usbfs_memory_mb=128" | sudo tee /etc/modprobe.d/usbcore.co
 ### ❓ Q2.9 驱动启动报 `LIBUSB_ERROR_ACCESS` / `libusb couldn't open USB device ... errno=13`？
 **回答：** 当前用户没有访问该 USB 设备的权限，通常是 udev 规则缺失或用户组不对。
 
-1. 创建 `/etc/udev/rules.d/99-odin.rules`，内容为：
+1. 创建 `/etc/udev/rules.d/99-NZ.rules`，内容为：
 
 ```shell
 SUBSYSTEM=="usb", ATTR{idVendor}=="2207", ATTR{idProduct}=="0019", MODE="0666", GROUP="plugdev"
@@ -268,8 +267,8 @@ sudo usermod -aG plugdev $USER
 **回答：**
 - **典型现象**：终端持续打印 `file start fail. transfer relocalizaiton map fail. please retry.`，重试无效甚至导致 driver 进程内存被打满。
 - **根因**：旧版 Driver 在重定位模式下，开流过程中触发 `deinit`，已知 `deinit` 之后再开流会爆内存。下列两种情况会触发 `deinit`：
-  1. **地图文件路径错误**（最常见）—— 加载路径不存在 / 没有读权限 / 不是合法 odin1 地图；
-  2. **地图上传 odin1 连续 3 次失败** —— 通常发生在 USB 链路不稳或主机算力被占满时。
+  1. **地图文件路径错误**（最常见）—— 加载路径不存在 / 没有读权限 / 不是合法 NZ1 地图；
+  2. **地图上传 NZ1 连续 3 次失败** —— 通常发生在 USB 链路不稳或主机算力被占满时。
 - **解决方案**：
   1. 升级到最新 ROS Driver（v0.11.0），固件版本升级到 0.12.0；
   2. 检查启动参数中的地图绝对路径，确保文件可读、与算法版本匹配；
@@ -279,7 +278,7 @@ sudo usermod -aG plugdev $USER
 **回答：** 使用 Driver 版本高于 0.10.0，建议使用 0.10.5 驱动版本 + 0.11.9 固件版本：
 
 ```bash
-cd $ROS_WORKSPACE/src/odin_ros_driver
+cd $ROS_WORKSPACE/src/NZ_ros_driver
 ./set_param.sh algo_reset 1
 ```
 
@@ -316,7 +315,7 @@ source ~/.bashrc
 ros2 doctor --report | grep -i middleware
 ```
 
-> Odin ROS Driver 默认在 **FastDDS**（`rmw_fastrtps_cpp`）下验证。若确实需要在同一主机上共存多个 DDS，请用独立 terminal session 的临时环境变量隔离，而非写入 `.bashrc`。
+> NZ1 ROS Driver 默认在 **FastDDS**（`rmw_fastrtps_cpp`）下验证。若确实需要在同一主机上共存多个 DDS，请用独立 terminal session 的临时环境变量隔离，而非写入 `.bashrc`。
 
 #### 情况 B：QoS 不匹配导致节点间数据默默丢弃
 
@@ -327,7 +326,7 @@ ros2 doctor --report | grep -i middleware
 **检查方法：**
 
 ```bash
-ros2 topic info /odin1/cloud_raw --verbose
+ros2 topic info /NZ1/cloud_raw --verbose
 # 比对 Publisher 和 Subscription 的 QoS profile
 ```
 
@@ -340,11 +339,10 @@ ros2 topic info /odin1/cloud_raw --verbose
 **原因：** SDK 内部队列入队速度 > 发布速度，导致积压溢出。常见于主机 CPU/内存被占用或数据传输链路带宽不足。
 
 **修复：**
-
-1. 给 Odin1 分配独立的数据传输链路，避免共享网络；
+1. 给 NZ1 分配独立的数据传输链路，避免共享网络；
 2. 通过 `ROS_DOMAIN_ID` + `ROS_LOCALHOST_ONLY=1` 做通信域隔离，减少无关广播；
 3. 关闭不必要的话题（如 `sendrgb: 0`、`sendcloudrender: 0`）；
-4. 优先订阅小数据量话题，如用 `/odin1/image/compressed` 替代 `/odin1/image`。
+4. 优先订阅小数据量话题，如用 `/NZ1/image/compressed` 替代 `/NZ1/image`。
 
 ### ❓ Q3.6 编译报 `ld: cannot find -llydHostApi` 或符号找不到？
 **回答：** 清理旧的编译产物后重新执行安装脚本。
@@ -384,7 +382,7 @@ export ROS_LOCALHOST_ONLY=1
 
 Q2.5 的做法是卸载多余的 OpenCV。如果系统上必须保留多个 OpenCV 版本，可用下面的替代方案：**在工作区内基于驱动所用的 OpenCV 重新编译 `cv_bridge`**，让两者使用同一份 OpenCV。所有产物只落在 `devel/`，**系统 `/opt/ros` 与系统 OpenCV 不会被改动**。
 
-**步骤一：下载 `vision_opencv`**（分支要与 ROS1 发行版对应），克隆到工作区 `src/` 下、与 `odin_ros_driver` 并列：
+**步骤一：下载 `vision_opencv`**（分支要与 ROS1 发行版对应），克隆到工作区 `src/` 下、与 `NZ_ros_driver` 并列：
 
 ```shell
 cd <your_catkin_ws>/src
@@ -400,7 +398,7 @@ cd <your_catkin_ws>
 catkin_make -DBUILD_SYSTEM=ROS1 -DCATKIN_WHITELIST_PACKAGES="cv_bridge" -j$(nproc)
 
 # (2) 再编驱动（此步不要清 build/devel）
-cd <your_catkin_ws>/src/odin_ros_driver/script
+cd <your_catkin_ws>/src/NZ_ros_driver/script
 ./build_ros.sh
 ```
 
@@ -409,18 +407,18 @@ cd <your_catkin_ws>/src/odin_ros_driver/script
 > cd <your_catkin_ws> && catkin_make -DBUILD_SYSTEM=ROS1 -j$(nproc)
 > ```
 
-**验证**：
+**验证：**
 
 ```shell
 source /opt/ros/noetic/setup.bash
 source <your_catkin_ws>/devel/setup.bash
-ldd <your_catkin_ws>/devel/lib/odin_ros_driver/host_sdk_sample | grep -iE 'cv_bridge|opencv_core'
+ldd <your_catkin_ws>/devel/lib/NZ_ros_driver/host_sdk_sample | grep -iE 'cv_bridge|opencv_core'
 ```
 
 - 修复前（会崩）：`libcv_bridge.so => /opt/ros/<distro>/lib/...`，且混入不匹配的旧版 `libopencv_core.so`；
 - 修复后：`libcv_bridge.so => <your_catkin_ws>/devel/lib/...`，且所有 `libopencv_*` 为同一版本。
 
-随后运行驱动，确认 `/odin1/image` 稳定发布且不再崩溃。
+随后运行驱动，确认 `/NZ1/image` 稳定发布且不再崩溃。
 
 > 请在干净的 ROS1 环境中操作，不要把 ROS2 发行版（如 foxy）混入 `LD_LIBRARY_PATH`，否则 `cv_bridge` 可能又解析回不匹配的 OpenCV。
 
@@ -435,10 +433,10 @@ ldd <your_catkin_ws>/devel/lib/odin_ros_driver/host_sdk_sample | grep -iE 'cv_br
 get version failed.
 ```
 
-设备固件版本过低，请先升级固件，方法见 [固件升级](09-固件升级.md)。
+设备固件版本过低，请先升级固件，方法见 [固件升级](9.%20Firmware%20Upgrade)。
 
 ### ❓ Q3.11 RViz 长时间无响应，随后终端提示设备断连？
-**回答：** 请对 Odin1 重新上电（断开并重新接通电源）后重启驱动。若同样的报错反复出现，请按 Q2.1 排查 USB 链路与主机负载；若伴随 `Missed ok response from device, probably wrong interaction procedure.`，处理方式相同。
+**回答：** 请对 NZ1 重新上电（断开并重新接通电源）后重启驱动。若同样的报错反复出现，请按 Q2.1 排查 USB 链路与主机负载；若伴随 `Missed ok response from device, probably wrong interaction procedure.`，处理方式相同。
 
 ### ❓ Q3.12 Docker 内启动 RViz 报 `Unable to open X display` / `No protocol specified`？
 **回答：** 在**宿主机**执行以下命令开启图形转发：
@@ -451,9 +449,8 @@ xhost +
 
 ## 四、时间同步与延迟
 
-### ❓ Q4.1 Odin 时间比 host 时间“靠后”是 bug 吗？
+### ❓ Q4.1 NZ1 时间比 host 时间"靠后"是 bug 吗？
 **回答：** 早期版本存在该问题，已通过 NTP 平滑 + Driver 时间戳改造在 0.11.0 系列修复。请升级到最新固件 + Driver 后重新配置。
-
 
 ### ❓ Q4.3 `cloud_raw` 与 `image` 时间戳存在 20–30 ms gap？
 **回答：** 已定位为 IMU 回调路径上的发布阻塞与 high_odo 处理阻塞，新版 Driver 通过异步化拆分回调修复。请升级到最新 Driver。
@@ -505,7 +502,7 @@ tf_extra_publish_rate: 100  # 0：关闭；>0：补发频率（Hz），ROS2 Jazz
 **回答：**
 - **`cloud_raw`**：未矫正历史位姿的原始点云，时延最低，**用于近处避障 / 实时感知**；
 - **`cloud_slam`**：经位姿矫正后的点云，**用于建图、定位**，无分层现象；
-- "分层"是 Odin1 不回放矫正历史点云的设计本身，不是 bug；建议按用途使用对应话题。
+- "分层"是 NZ1 不回放矫正历史点云的设计本身，不是 bug；建议按用途使用对应话题。
 
 ### ❓ Q5.4 RGB 颜色异常（偏暗 / 偏紫）？
 **回答：**
@@ -517,10 +514,10 @@ tf_extra_publish_rate: 100  # 0：关闭；>0：补发频率（Hz），ROS2 Jazz
 
 | Service | 类型 | 用途 |
 |---|---|---|
-| `/odin1/get_ae` | `odin_ros_driver/srv/GetAe` | 查询当前 AE 状态 |
-| `/odin1/get_awb` | `odin_ros_driver/srv/GetAwb` | 查询当前 AWB 状态 |
-| `/odin1/set_ae` | `odin_ros_driver/srv/SetAe` | 设置 AE 模式与手动曝光 / 增益 |
-| `/odin1/set_awb` | `odin_ros_driver/srv/SetAwb` | 设置 AWB 模式与手动 R / B 增益 |
+| `/NZ1/get_ae` | `NZ_ros_driver/srv/GetAe` | 查询当前 AE 状态 |
+| `/NZ1/get_awb` | `NZ_ros_driver/srv/GetAwb` | 查询当前 AWB 状态 |
+| `/NZ1/set_ae` | `NZ_ros_driver/srv/SetAe` | 设置 AE 模式与手动曝光 / 增益 |
+| `/NZ1/set_awb` | `NZ_ros_driver/srv/SetAwb` | 设置 AWB 模式与手动 R / B 增益 |
 
 **参数范围与含义**
 
@@ -541,20 +538,20 @@ tf_extra_publish_rate: 100  # 0：关闭；>0：补发频率（Hz），ROS2 Jazz
 source install/setup.bash
 
 # 查询当前状态
-ros2 service call /odin1/get_ae  odin_ros_driver/srv/GetAe
-ros2 service call /odin1/get_awb odin_ros_driver/srv/GetAwb
+ros2 service call /NZ1/get_ae  NZ_ros_driver/srv/GetAe
+ros2 service call /NZ1/get_awb NZ_ros_driver/srv/GetAwb
 
 # 手动：10 ms 曝光、增益 4.0
-ros2 service call /odin1/set_ae odin_ros_driver/srv/SetAe \
+ros2 service call /NZ1/set_ae NZ_ros_driver/srv/SetAe \
   "{mode: 1, exposure_time: 0.010, gain: 4.0}"
 
 # 手动白平衡：rgain=1.5、bgain=2.0
-ros2 service call /odin1/set_awb odin_ros_driver/srv/SetAwb \
+ros2 service call /NZ1/set_awb NZ_ros_driver/srv/SetAwb \
   "{mode: 1, rgain: 1.5, bgain: 2.0}"
 
 # 一键恢复自动
-ros2 service call /odin1/set_ae  odin_ros_driver/srv/SetAe  "{mode: 0}"
-ros2 service call /odin1/set_awb odin_ros_driver/srv/SetAwb "{mode: 0}"
+ros2 service call /NZ1/set_ae  NZ_ros_driver/srv/SetAe  "{mode: 0}"
+ros2 service call /NZ1/set_awb NZ_ros_driver/srv/SetAwb "{mode: 0}"
 ```
 
 **调用示例（ROS1 Noetic）**
@@ -563,16 +560,16 @@ ros2 service call /odin1/set_awb odin_ros_driver/srv/SetAwb "{mode: 0}"
 source devel/setup.bash
 
 # 查询
-rosservice call /odin1/get_ae
-rosservice call /odin1/get_awb
+rosservice call /NZ1/get_ae
+rosservice call /NZ1/get_awb
 
 # 手动设置
-rosservice call /odin1/set_ae  "{mode: 1, exposure_time: 0.010, gain: 4.0}"
-rosservice call /odin1/set_awb "{mode: 1, rgain: 1.5, bgain: 2.0}"
+rosservice call /NZ1/set_ae  "{mode: 1, exposure_time: 0.010, gain: 4.0}"
+rosservice call /NZ1/set_awb "{mode: 1, rgain: 1.5, bgain: 2.0}"
 
 # 恢复自动（ROS1 要求字段填齐）
-rosservice call /odin1/set_ae  "{mode: 0, exposure_time: 0.0, gain: 0.0}"
-rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
+rosservice call /NZ1/set_ae  "{mode: 0, exposure_time: 0.0, gain: 0.0}"
+rosservice call /NZ1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 ```
 
 **不同场景推荐起步参数**
@@ -601,12 +598,12 @@ rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 
 ## 六、重定位与地图
 
-### ❓ Q6.1 用 Q9000 建图给 Odin1 重定位很难定位？
+### ❓ Q6.1 用 Q9000 建图给 NZ1 重定位很难定位？
 **回答：**
-- **现象**：Q9000 扫描的地图相对 Odin1 自建地图更不容易重定位成功。
+- **现象**：Q9000 扫描的地图相对 NZ1 自建地图更不容易重定位成功。
 - **排查方向**：
   1. 使用最新版本的 MindCloud 处理和导出 Q9000 的地图文件；
-  2. Q9000 手持扫描时正面镜头角度和高度尽量对齐 Odin1 实际安装角度。
+  2. Q9000 手持扫描时正面镜头角度和高度尽量对齐 NZ1 实际安装角度。
 - **建议方案**：使用 `custom_init_pos` 功能，给定初始位姿，可提高重定位效率。
 
 ### ❓ Q6.2 静态重定位 / 设备不动时无法定位？
@@ -624,7 +621,7 @@ rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 **回答：**
 - **重定位地图导入 MindCloud Studio**：1.0.3 版本 MindCloud 已经可以正常使用；
 - **MindCloud Studio 导出编辑后的地图**：目前不支持，研发已立项；
-- **Q9000 数据导入云平台 → 导出 Odin 重定位地图**：已实现。
+- **Q9000 数据导入云平台 → 导出 NZ1 重定位地图**：已实现。
 
 ### ❓ Q6.6 MindCloud 授权 / 涉密地图不上云？
 **回答：**
@@ -646,14 +643,14 @@ rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 - **SLAM 模式**：长直退化场景需要充足特征支撑。
 
 建议：
-1. 优化结构设计，确认 Odin1 可视范围内没有扫到机翼、机身、机架等固定障碍物；
+1. 优化结构设计，确认 NZ1 可视范围内没有扫到机翼、机身、机架等固定障碍物；
 2. 提供至少 5°~10° 的横滚 / 俯仰小幅扰动，避免完全单调直行；
-3. 若测试仍有问题，建议提前联系技术支持做 bag 复盘，建议客户录制 `/odin1/cloud_raw` & `/odin1/imu` & `/odin1/image/compressed` 成一个 bag 包，另提供重定位 bin 地图和标定参数 `calib.yaml` 文件到 FAE。
+3. 若测试仍有问题，建议提前联系技术支持做 bag 复盘，建议客户录制 `/NZ1/cloud_raw` & `/NZ1/imu` & `/NZ1/image/compressed` 成一个 bag 包，另提供重定位 bin 地图和标定参数 `calib.yaml` 文件到 FAE。
 
 ### ❓ Q7.3 算法重置（algo_reset）什么时候用？
 **回答：** 用于碰撞、剧烈位姿跳变后主动让 SLAM 重新初始化。0.10.5+ Driver 已提供 `algo_reset` 接口与 demo，可由客户在异常事件触发时调用。
 
-调用方式：另起终端，进入 `$ros_workspace/src/odin_ros_driver/` 目录，执行：
+调用方式：另起终端，进入 `$ros_workspace/src/NZ_ros_driver/` 目录，执行：
 
 ```bash
 ./set_param.sh algo_reset 1
@@ -693,28 +690,28 @@ rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 ## 九、帧率模式
 
 ### ❓ Q9.1 高速运动场景效果差？
-**回答：** Odin1 提供 **14.5 Hz 模式**，可以提高扫描帧率，但是由于Odin为flash固态雷达，每次扫描的点云是在一个位置，所以静止状态下并不会增加分辨率或者提升扫描密度。
+**回答：** NZ1 提供 **14.5 Hz 模式**，可以提高扫描帧率，但是由于NZ1为flash固态雷达，每次扫描的点云是在一个位置，所以静止状态下并不会增加分辨率或者提升扫描密度。
 
 ---
 
 ## 十、多机同场使用
 
-### ❓ Q10.1 同一场地能放多少台 Odin？会互相干扰吗？
+### ❓ Q10.1 同一场地能放多少台 NZ1？会互相干扰吗？
 **回答：**
-- Odin1 dTOF 采用编码 / 时分等机制，**多台同场干扰较低**，已在赛事场景试验；
+- NZ1 dTOF 采用编码 / 时分等机制，**多台同场干扰较低**，已在赛事场景试验；
 - 具体最大并发数受空间密度与遮挡关系影响，建议批量部署前做现场试装；如需技术联调，联系技术支持。
 
 ### ❓ Q10.2 与机械式 LiDAR 相比的差异化？
 **回答：**
-- **原理不同**：机械式 LiDAR主要靠机械转动实现360度扫描，odin1为纯固态雷达，为全局曝光；
+- **原理不同**：机械式 LiDAR主要靠机械转动实现360度扫描，NZ1为纯固态雷达，为全局曝光；
 - **结构不同**：无机械旋转，抗振动能力更好（参见第八章）。
 
 ---
 
 ## 十一、系统兼容
 
-### ❓ Q11.1 Odin1 支持的系统有哪些？
-**回答：** Odin1 支持 x86 架构和 ARM 架构 Ubuntu 20.04 ROS1/ROS2、Ubuntu 22.04 ROS2 等 Linux 系统。
+### ❓ Q11.1 NZ1 支持的系统有哪些？
+**回答：** NZ1 支持 x86 架构和 ARM 架构 Ubuntu 20.04 ROS1/ROS2、Ubuntu 22.04 ROS2 等 Linux 系统。
 
 ---
 
@@ -732,34 +729,34 @@ rosservice call /odin1/set_awb "{mode: 0, rgain: 0.0, bgain: 0.0}"
 
 ## 十三、标准录包命令
 
-### ❓ Q13.1 Odin1 录包命令？
+### ❓ Q13.1 NZ1 录包命令？
 **回答：**
 
 ```bash
 # ros1
-rosbag record /odin/image/compressed /odin/imu /odin/cloud_raw /odin/odometry
+rosbag record /NZ/image/compressed /NZ/imu /NZ/cloud_raw /NZ/odometry
 
 # ros2
-ros2 bag record /odin/image/compressed /odin/imu /odin/cloud_raw /odin/odometry
+ros2 bag record /NZ/image/compressed /NZ/imu /NZ/cloud_raw /NZ/odometry
 ```
 
-> 注 1：需同时提供标定文件 `calib.yaml`，重定位模式需提供地图文件；  
+> 注 1：需同时提供标定文件 `calib.yaml`，重定位模式需提供地图文件；
 > 注 2：可根据问题现象，录制问题相关的话题。
 
 ### ❓ Q13.2 ros2 bag 录包丢失高频话题（IMU / odometry_highfreq）？
 **回答：**
-- **现象**：低频话题（点云、图像、odometry）完整无丢，但 `/odin1/imu`（400 Hz）与 `/odin1/odometry_highfreq`（400 Hz）出现丢帧，消息间隔达到正常周期的 2 倍以上；同时 SDK 侧不报丢，独立的 `ros2 topic hz` 订阅者也看不到丢。
+- **现象**：低频话题（点云、图像、odometry）完整无丢，但 `/NZ1/imu`（400 Hz）与 `/NZ1/odometry_highfreq`（400 Hz）出现丢帧，消息间隔达到正常周期的 2 倍以上；同时 SDK 侧不报丢，独立的 `ros2 topic hz` 订阅者也看不到丢。
 - **根因**：驱动以 `RELIABLE` QoS 发布这两个话题，而 `ros2 bag record` 默认订阅为 `history = keep_last`、`depth = 10`，在 400 Hz 下只能缓冲约 25 ms。录制端一旦瞬时阻塞（落盘 flush、mcap/sqlite chunk 写入、调度抖动），订阅队列就会溢出，DDS 在**订阅端**静默丢掉最旧的样本，因此发布端与 `ros2 topic hz` 都看不到。
 - **解决方法**：录制时用 QoS override 拉大订阅队列深度，配置文件可从 [rosbag2_qos.yaml](./assets/code/rosbag2_qos.yaml) 获取：
 
 ```yaml
 # rosbag2_qos.yaml
-/odin1/imu:
+/NZ1/imu:
   reliability: reliable
   history: keep_last
   depth: 4000
 
-/odin1/odometry_highfreq:
+/NZ1/odometry_highfreq:
   reliability: reliable
   history: keep_last
   depth: 4000
@@ -775,7 +772,7 @@ ros2 bag record -a --qos-profile-overrides-path rosbag2_qos.yaml -o my_bag
 # 换 mcap 后端 + 更大的内部缓存（比 sqlite3 快）
 ros2 bag record -s mcap --max-cache-size 1073741824 \
     --qos-profile-overrides-path rosbag2_qos.yaml -o my_bag \
-    /odin1/imu /odin1/odometry_highfreq
+    /NZ1/imu /NZ1/odometry_highfreq
 
 # 放大内核 UDP socket buffer（400 Hz RELIABLE 流量最常见的隐蔽瓶颈，默认仅 208 KB）
 sudo sysctl -w net.core.rmem_max=33554432
@@ -783,4 +780,5 @@ sudo sysctl -w net.core.wmem_max=33554432
 ```
 
 - **ROS1 是否存在同样的问题**：不存在。ROS1 使用基于 TCP 的发布/订阅，发布端与订阅端各自只有一个 `queue_size`，不存在 ROS2 那种 QoS profile 不匹配的问题；驱动 ROS1 路径已将 IMU 与 `odometry_highfreq` 的发布队列设为 4000，`rosbag record` 走 TCP 传输本身即可靠传递，无需额外配置。
+
 > 如本手册未涵盖您的问题，请联系技术支持并提供：① 设备 SN；② 固件 / Driver 版本；③ 完整启动日志；④ 复现 bag（建议 30 秒以上）。我们将按工单优先级响应。

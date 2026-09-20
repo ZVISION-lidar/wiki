@@ -52,3 +52,33 @@ body, .md-typeset {
 .md-typeset h1 { font-size: 2rem; font-weight: 700; }
 .md-typeset h2 { font-size: 1.5rem; font-weight: 700; }
 .md-typeset h3 { font-size: 1.2rem; font-weight: 600; }
+
+/* ============================================================
+   侧边栏 - 禁止导航文字换行（避免标题太长自动折行）
+   ============================================================ */
+.md-nav__link,
+.md-nav__title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================================
+   封面图样式 - 居中 + 限制宽度 + 阴影
+   ============================================================ */
+.nb-cover-full-img {
+    display: block;
+    width: 90%;
+    margin: 1.5em 0 2em 0;   /* 左对齐 */
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.nb-cover-img {
+    display: block;
+    width: 75%;
+    max-width: 720px;
+    margin: 1.5em auto 2em auto;   /* 上下留白 + 水平居中 */
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
