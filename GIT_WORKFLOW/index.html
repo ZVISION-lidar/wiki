@@ -1,0 +1,2439 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="技术文档知识库">
+      
+      
+        <meta name="author" content="Administrator">
+      
+      
+      
+        <link rel="prev" href="../config/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Git 更新流程 - ZVISION的Wiki文档</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#zvision-wiki-git" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="ZVISION的Wiki文档" class="md-header__button md-logo" aria-label="ZVISION的Wiki文档" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZVISION的Wiki文档
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Git 更新流程
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换暗色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换暗色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换亮色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换亮色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../zvision_nz_series/quickstart/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  快速上手
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../zvision_nz_series/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  产品文档
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../config/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  配置说明
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Git 更新流程
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ZVISION的Wiki文档" class="md-nav__button md-logo" aria-label="ZVISION的Wiki文档" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZVISION的Wiki文档
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速上手
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    快速上手
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速上手
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../zvision_nz_series/demo/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速开始demo
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    快速开始demo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/demo/demo1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    demo1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/demo/demo2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    demo2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/slam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速开始SLAM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../zvision_nz_series/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品文档
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    产品文档
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../zvision_nz_series/NZ1/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NZ1
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    NZ1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/cover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用户手册
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/00-reading-tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    阅读提示
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/01-%E4%BA%A7%E5%93%81%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/02-%E7%A1%AC%E4%BB%B6%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    硬件说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/03-%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安装指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/04-%E7%94%B5%E6%BA%90%E4%B8%8E%E8%BF%9E%E6%8E%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    电源与连接
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/05-%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据输出
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_9" id="__nav_3_2_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLAM 启动
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SLAM 启动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/SLAM/01-FASTLIO2%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FASTLIO2 使用说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/SLAM/02-SuperLIO2%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SuperLIO2 使用说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/06-Ubuntu%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ubuntu快速启动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/07-Windows%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows快速启动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/08-%E5%9B%BA%E4%BB%B6%E5%8D%87%E7%BA%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    固件升级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/09-%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时间同步
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/13-%E7%BB%B4%E6%8A%A4%E4%B8%8E%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    维护与故障排除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/14-%E6%8A%80%E6%9C%AF%E5%8F%82%E6%95%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    技术参数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/15-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98FAQ/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    常见问题FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zvision_nz_series/NZ1/%E5%85%B3%E6%B3%A8%E6%88%91%E4%BB%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关注我们
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    配置说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git 更新流程
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git 更新流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 仓库分支模型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 项目结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 首次克隆仓库
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 单次改动完整流程（4 个阶段）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 单次改动完整流程（4 个阶段）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 B：在功能分支上改文档并提交
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 C：推送功能分支并合并到 zvision_develop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-zvision_develop-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 D：定期发布——把 zvision_develop 合并到 main 触发上线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 验证发布是否成功
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 任务完成后清理
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 多人协作注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 常见情况和恢复操作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 常见情况和恢复操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 改错了，还没 commit，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-commit-push-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 已经 commit，但还没 push，想撤销最后一次 commit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 已经 push 到功能分支，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-merge-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 已经 merge 到 zvision_develop 了，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 已经发布到 main 了，发现内容不对
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-git-merge-no-ff-zvision_develop-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 git merge --no-ff zvision_develop 发布到 main 时报冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 合并功能分支时有冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 不要做的事
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-typo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 完整示例：改一个 typo 的全过程
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 仓库分支模型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 项目结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 首次克隆仓库
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 单次改动完整流程（4 个阶段）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 单次改动完整流程（4 个阶段）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 B：在功能分支上改文档并提交
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 C：推送功能分支并合并到 zvision_develop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-zvision_develop-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段 D：定期发布——把 zvision_develop 合并到 main 触发上线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 验证发布是否成功
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 任务完成后清理
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 多人协作注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 常见情况和恢复操作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 常见情况和恢复操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 改错了，还没 commit，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-commit-push-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 已经 commit，但还没 push，想撤销最后一次 commit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 已经 push 到功能分支，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-merge-zvision_develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 已经 merge 到 zvision_develop 了，想撤销
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 已经发布到 main 了，发现内容不对
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-git-merge-no-ff-zvision_develop-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 git merge --no-ff zvision_develop 发布到 main 时报冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 合并功能分支时有冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 不要做的事
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-typo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 完整示例：改一个 typo 的全过程
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="zvision-wiki-git">ZVISION Wiki Git 操作手册</h1>
+<blockquote>
+<p><strong>适用仓库</strong>：<a href="https://github.com/ZVISION-lidar/wiki.git">https://github.com/ZVISION-lidar/wiki.git</a>（公开仓库）
+<strong>部署方式</strong>：push <code>main</code> → GitHub Actions 自动构建 → <code>mkdocs gh-deploy</code> 推送 <code>gh-pages</code> 分支上线</p>
+</blockquote>
+<hr />
+<h2 id="_1">目录</h2>
+<ul>
+<li><a href="#1-仓库分支模型">1. 仓库分支模型</a></li>
+<li><a href="#2-项目结构">2. 项目结构</a></li>
+<li><a href="#3-首次克隆仓库">3. 首次克隆仓库</a></li>
+<li><a href="#4-单次改动完整流程4-个阶段">4. 单次改动完整流程（4 个阶段）</a></li>
+<li><a href="#5-验证发布是否成功">5. 验证发布是否成功</a></li>
+<li><a href="#6-任务完成后清理">6. 任务完成后清理</a></li>
+<li><a href="#7-多人协作注意事项">7. 多人协作注意事项</a></li>
+<li><a href="#8-常见情况和恢复操作">8. 常见情况和恢复操作</a></li>
+<li><a href="#9-不要做的事">9. 不要做的事</a></li>
+<li><a href="#10-速查表">10. 速查表</a></li>
+<li><a href="#11-完整示例改一个-typo-的全过程">11. 完整示例：改一个 typo 的全过程</a></li>
+</ul>
+<hr />
+<h2 id="1">1. 仓库分支模型</h2>
+<table>
+<thead>
+<tr>
+<th>分支</th>
+<th>用途</th>
+<th>是否触发 GitHub Pages 构建</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td>线上发布分支</td>
+<td>✅ 触发，push 后 1–3 分钟生效</td>
+</tr>
+<tr>
+<td><code>zvision_develop</code></td>
+<td>集成分支，所有功能分支合并到这里</td>
+<td>❌ 不触发</td>
+</tr>
+<tr>
+<td><code>feature/&lt;名字&gt;</code></td>
+<td>个人功能分支，基于 <code>zvision_develop</code> 创建</td>
+<td>❌ 不触发</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心规则：</strong></p>
+<ul>
+<li>❌ <strong>永远不要直接在 <code>main</code> 上 commit</strong></li>
+<li>❌ <strong>永远不要直接在 <code>zvision_develop</code> 上 commit</strong></li>
+<li>✅ 改动流程：从 <code>zvision_develop</code> 拉 <code>feature/&lt;名字&gt;</code> → 在 feature 上改 → push → 合并到 <code>zvision_develop</code> → 测试稳定后从 <code>zvision_develop</code> 发布到 <code>main</code></li>
+</ul>
+<hr />
+<h2 id="2">2. 项目结构</h2>
+<div class="highlight"><pre><span></span><code>wiki/
+├── mkdocs.yml          ← 站点配置文件（导航、主题、插件）
+├── docs/               ← 所有文档源文件（Markdown + 资源）
+│   ├── index.md        ← 首页
+│   ├── config.md
+│   ├── GIT_WORKFLOW.md ← 本手册
+│   ├── zvision_nz_series/
+│   │   ├── index.md
+│   │   └── NZ1/
+│   │       ├── 01-产品概述.md
+│   │       ├── 02-硬件说明.md
+│   │       └── ...
+│   └── stylesheets/
+│       └── extra.css   ← 自定义 CSS
+└── site/               ← mkdocs build 生成的静态站点（无需上传 git）
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">关于 site/ 目录</p>
+<p><code>site/</code> 是 <code>mkdocs build</code> 的输出目录，已在 <code>.gitignore</code> 中忽略，不会被提交。
+实际部署由 GitHub Actions 执行 <code>mkdocs gh-deploy</code>，自动构建并推送到 <code>gh-pages</code> 分支。</p>
+</div>
+<hr />
+<h2 id="3">3. 首次克隆仓库</h2>
+<p>如果你还没有本地副本，先克隆并切到集成分支：</p>
+<div class="highlight"><pre><span></span><code><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">ZVISION-lidar</span><span class="p">/</span><span class="n">wiki</span><span class="p">.</span><span class="n">git</span> <span class="n">wiki</span>
+<span class="nb">cd </span><span class="n">wiki</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+</code></pre></div>
+<hr />
+<h2 id="4-4">4. 单次改动完整流程（4 个阶段）</h2>
+<h3 id="a-zvision_develop">阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支</h3>
+<div class="highlight"><pre><span></span><code><span class="c"># 1. 切到 zvision_develop</span>
+<span class="nb">cd </span><span class="n">wiki</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+
+<span class="c"># 2. 同步远端最新 zvision_develop</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">zvision_develop</span>
+
+<span class="c"># 3. 基于 zvision_develop 建自己的功能分支</span>
+<span class="c">#    分支名建议：feature/&lt;姓名-功能&gt;，如 feature/tzy-fix-nz1-slam</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">-c</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-slam</span>
+</code></pre></div>
+<h3 id="b">阶段 B：在功能分支上改文档并提交</h3>
+<div class="highlight"><pre><span></span><code><span class="c"># 1. 用任意编辑器（如 VS Code）打开 docs/ 下的文件进行修改</span>
+<span class="c">#    建议修改后，先在 wiki 下新建终端，输入：</span>
+<span class="c">#    mkdocs serve  → 浏览器打开 http://127.0.0.1:8000 查看修改效果</span>
+
+<span class="c"># 2. 查看改动</span>
+<span class="n">git</span> <span class="n">status</span>              <span class="c"># 列出修改 / 新增 / 删除的文件</span>
+<span class="n">git</span> <span class="nb">diff </span>               <span class="c"># 查看具体行级改动</span>
+<span class="n">git</span> <span class="nb">diff </span><span class="p">-</span><span class="n">-stat</span>         <span class="c"># 只看每个文件改了几行</span>
+
+<span class="c"># 3. 提交</span>
+<span class="n">git</span> <span class="n">add</span> <span class="n">-A</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">"docs(&lt;模块&gt;): 一句话描述这次改了什么"</span>
+<span class="c"># 示例：git commit -m "docs(SLAM/fastlio2): 增加使用说明"</span>
+</code></pre></div>
+<h3 id="c-zvision_develop">阶段 C：推送功能分支并合并到 zvision_develop</h3>
+<div class="highlight"><pre><span></span><code><span class="c"># 1. 推到远端</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-slam</span>
+
+<span class="c"># 2. 合并到 zvision_develop（必须用 --no-ff）</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="p">-</span><span class="n">-no-ff</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-slam</span> <span class="n">-m</span> <span class="s2">"Merge: &lt;一句话描述&gt;"</span>
+
+<span class="c"># 3. 推送到远端</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">zvision_develop</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">必须用 --no-ff</p>
+<p>创建 merge commit，这样 <code>main</code> 的历史里能清楚看到每次合入的功能。</p>
+</div>
+<h3 id="d-zvision_develop-main">阶段 D：定期发布——把 zvision_develop 合并到 main 触发上线</h3>
+<div class="admonition note">
+<p class="admonition-title">什么时候发布？</p>
+<p>攒了一批改动、测试通过后，由维护者定期（按需，比如每天 / 每周 / 发布节点）从 <code>zvision_develop</code> 发布到 <code>main</code>。
+日常单次改动不需要走这一步。</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c"># 1. 切到 main</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">main</span>
+
+<span class="c"># 2. 同步远端 main（避免漏掉别人发布的内容）</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">main</span>
+
+<span class="c"># 3. 合并 zvision_develop 到 main（必须用 --no-ff）</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="p">-</span><span class="n">-no-ff</span> <span class="n">zvision_develop</span> <span class="n">-m</span> <span class="s2">"Release: &lt;一句话&gt;"</span>
+
+<span class="c"># 4. 推送到远端，触发 Pages 构建</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">main</span>
+
+<span class="c"># 5. 切回 zvision_develop 继续工作</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">必须用 --no-ff</p>
+<p>创建 merge commit，让 <code>main</code> 历史里能看到每次发布的合并节点，避免 fast-forward 失败。</p>
+</div>
+<hr />
+<h2 id="5">5. 验证发布是否成功</h2>
+<p>push <code>main</code> 后 1–3 分钟，访问下面链接并刷新（<strong>Ctrl+F5 强刷新</strong>避开浏览器缓存）：</p>
+<ul>
+<li>🔗 <a href="https://zvision-lidar.github.io/wiki/">https://zvision-lidar.github.io/wiki/</a></li>
+</ul>
+<p>也可以在 GitHub 仓库页 → <strong>Actions</strong> 标签查看构建是否成功（绿勾 ✅ = 已上线）。</p>
+<hr />
+<h2 id="6">6. 任务完成后清理</h2>
+<div class="highlight"><pre><span></span><code><span class="c"># 1. 切回 zvision_develop（确保在 zvision_develop 上）</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+
+<span class="c"># 2. 删除本地功能分支</span>
+<span class="n">git</span> <span class="n">branch</span> <span class="n">-d</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-slam</span>
+
+<span class="c"># 3. 删除远端功能分支（可选，合并后可以顺手删掉）</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="p">-</span><span class="n">-delete</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-slam</span>
+
+<span class="c"># 4. 开始下一个任务</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">zvision_develop</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">-c</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-add-faq</span>
+</code></pre></div>
+<hr />
+<h2 id="7">7. 多人协作注意事项</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每次新任务</td>
+<td>先 <code>git switch zvision_develop &amp;&amp; git pull</code> 再新建 <code>feature/&lt;名字&gt;</code></td>
+</tr>
+<tr>
+<td>多人同时改同一文件</td>
+<td>先协商或错开时间，或拆成不同功能分支</td>
+</tr>
+<tr>
+<td>提交后发现还有问题</td>
+<td>直接再 commit + push 覆盖</td>
+</tr>
+<tr>
+<td>功能分支合并有冲突</td>
+<td>在本地 rebase 到最新 <code>zvision_develop</code>，解决冲突后用 <code>git push --force-with-lease</code>（比 <code>-f</code> 安全，若远端已被别人更新会拒绝推送）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8">8. 常见情况和恢复操作</h2>
+<h3 id="81-commit">8.1 改错了，还没 commit，想撤销</h3>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>status<span class="w">                           </span><span class="c1"># 看哪些文件被改了</span>
+git<span class="w"> </span>restore<span class="w"> </span>&lt;文件路径&gt;<span class="w">               </span><span class="c1"># 撤销单个文件</span>
+git<span class="w"> </span>restore<span class="w"> </span>.<span class="w">                        </span><span class="c1"># 撤销当前目录所有改动（慎用！）</span>
+</code></pre></div>
+<h3 id="82-commit-push-commit">8.2 已经 commit，但还没 push，想撤销最后一次 commit</h3>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1<span class="w">              </span><span class="c1"># 撤销 commit，改动保留在暂存区</span>
+<span class="c1"># 或</span>
+git<span class="w"> </span>reset<span class="w"> </span>HEAD~1<span class="w">                     </span><span class="c1"># 撤销 commit，改动保留在工作区（更常用）</span>
+</code></pre></div>
+<h3 id="83-push">8.3 已经 push 到功能分支，想撤销</h3>
+<p>修改后再 commit + push 一次即可。
+不要用 <code>git push -f</code>，除非确认没人在用这个分支。</p>
+<h3 id="84-merge-zvision_develop">8.4 已经 merge 到 zvision_develop 了，想撤销</h3>
+<p><strong>最安全的做法</strong>：新开一个 feature 分支修复，或者在 <code>zvision_develop</code> 上直接 commit 修复。
+<strong>不要</strong>用 <code>git reset</code> + <code>git push -f zvision_develop</code>，会破坏历史。</p>
+<h3 id="85-main">8.5 已经发布到 main 了，发现内容不对</h3>
+<p><strong>最安全的做法</strong>：重新改一遍 → 走完整流程修复 → 等下次发布到 <code>main</code>。
+<strong>不要</strong>用 <code>git reset</code> + <code>git push -f main</code>，会破坏历史。</p>
+<h3 id="86-git-merge-no-ff-zvision_develop-main">8.6 <code>git merge --no-ff zvision_develop</code> 发布到 main 时报冲突</h3>
+<p>正常情况下不会发生，因为 <code>main</code> 应该是 <code>zvision_develop</code> 的子集。如果真发生，多半是 <code>main</code> 上意外有了别的提交（有人违反了「不在 main 上直接 commit」的规则）：</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>status<span class="w">                           </span><span class="c1"># 看冲突文件</span>
+<span class="c1"># 手动编辑冲突文件，删掉 &lt;&lt;&lt;&lt;&lt;&lt;&lt; / ======= / &gt;&gt;&gt;&gt;&gt;&gt;&gt; 标记</span>
+git<span class="w"> </span>add<span class="w"> </span>&lt;冲突文件&gt;
+git<span class="w"> </span>commit<span class="w">                           </span><span class="c1"># 完成合并</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div>
+<p>冲突复杂搞不定就找维护者帮忙。</p>
+<h3 id="87">8.7 合并功能分支时有冲突</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 切到你的功能分支</span>
+git<span class="w"> </span>switch<span class="w"> </span>feature/tzy-fix-nz1-slam
+
+<span class="c1"># rebase 到最新 zvision_develop</span>
+git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>rebase<span class="w"> </span>origin/zvision_develop
+</code></pre></div>
+<p>手动解决冲突后（删掉 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> / <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 标记），继续：</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>&lt;冲突文件&gt;
+git<span class="w"> </span>rebase<span class="w"> </span>--continue
+git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w"> </span>origin<span class="w"> </span>feature/tzy-fix-nz1-slam
+</code></pre></div>
+<hr />
+<h2 id="9">9. 不要做的事</h2>
+<ul>
+<li>❌ 在 <code>main</code> 上直接 commit（必须通过 <code>zvision_develop</code> 合并过去）</li>
+<li>❌ 在 <code>zvision_develop</code> 上直接 commit（必须通过 feature 分支合并进去）</li>
+<li>❌ <code>git push -f</code>（强制推送，会覆盖远端历史）</li>
+<li>❌ <code>git reset --hard</code> 后立刻 <code>git push -f</code></li>
+<li>❌ 多人同时在同一个 feature 分支上工作（每人用自己分支）</li>
+</ul>
+<hr />
+<h2 id="10">10. 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>想做什么</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步 zvision_develop</td>
+<td><code>git switch zvision_develop &amp;&amp; git pull origin zvision_develop</code></td>
+</tr>
+<tr>
+<td>新建功能分支</td>
+<td><code>git switch -c feature/&lt;名字&gt;</code></td>
+</tr>
+<tr>
+<td>切换分支</td>
+<td><code>git switch &lt;分支名&gt;</code></td>
+</tr>
+<tr>
+<td>当前是哪个分支</td>
+<td><code>git branch --show-current</code></td>
+</tr>
+<tr>
+<td>看当前改了什么</td>
+<td><code>git status</code></td>
+</tr>
+<tr>
+<td>看具体行级改动</td>
+<td><code>git diff</code></td>
+</tr>
+<tr>
+<td>看简要改动统计</td>
+<td><code>git diff --stat</code></td>
+</tr>
+<tr>
+<td>提交</td>
+<td><code>git add -A &amp;&amp; git commit -m "..."</code></td>
+</tr>
+<tr>
+<td>推送到远端</td>
+<td><code>git push origin &lt;分支名&gt;</code></td>
+</tr>
+<tr>
+<td>删除本地分支</td>
+<td><code>git branch -d &lt;分支名&gt;</code></td>
+</tr>
+<tr>
+<td>删除远端分支</td>
+<td><code>git push origin --delete &lt;分支名&gt;</code></td>
+</tr>
+<tr>
+<td>发布到 main</td>
+<td><code>git switch main &amp;&amp; git pull &amp;&amp; git merge --no-ff zvision_develop &amp;&amp; git push</code></td>
+</tr>
+<tr>
+<td>拉取远端最新</td>
+<td><code>git pull origin &lt;分支&gt;</code></td>
+</tr>
+<tr>
+<td>本地预览网站</td>
+<td><code>mkdocs serve</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-typo">11. 完整示例：改一个 typo 的全过程</h2>
+<p>假设要把 <code>01-产品概述.md</code> 里「NZ1 系列」改成「NZ1 系列产品」：</p>
+<div class="highlight"><pre><span></span><code><span class="c"># 阶段 A：建功能分支</span>
+<span class="nb">cd </span><span class="n">wiki</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">zvision_develop</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">-c</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-title</span>
+
+<span class="c"># 阶段 B：改文档 + 提交</span>
+<span class="c"># 用 VS Code / Cursor 编辑 docs/zvision_nz_series/NZ1/01-产品概述.md</span>
+<span class="n">git</span> <span class="nb">diff</span>
+<span class="n">git</span> <span class="n">add</span> <span class="n">-A</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">"docs(NZ1): fix typo in product overview"</span>
+
+<span class="c"># 阶段 C：推到远端 + 合并到 zvision_develop</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-title</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="p">-</span><span class="n">-no-ff</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-title</span> <span class="n">-m</span> <span class="s2">"Merge: fix nz1 title typo"</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">zvision_develop</span>
+
+<span class="c"># 阶段 D（定期发布时由维护者执行）：发布到 main</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">main</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="p">-</span><span class="n">-no-ff</span> <span class="n">zvision_develop</span> <span class="n">-m</span> <span class="s2">"Release: typo fix in NZ1 product overview"</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">main</span>
+<span class="n">git</span> <span class="k">switch</span> <span class="n">zvision_develop</span>
+
+<span class="c"># 1–3 分钟后访问 https://zvision-lidar.github.io/wiki/ 验证（Ctrl+F5）</span>
+
+<span class="c"># 清理</span>
+<span class="n">git</span> <span class="n">branch</span> <span class="n">-d</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-title</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="p">-</span><span class="n">-delete</span> <span class="n">feature</span><span class="p">/</span><span class="n">tzy-fix-nz1-title</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
