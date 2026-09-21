@@ -1,7 +1,23 @@
 # ZVISION Wiki Git 操作手册
 
-> 适用仓库：`https://github.com/ZVISION-lidar/wiki.git`（公开仓库）
-> GitHub Pages 部署：push main → GitHub Actions 自动构建 → `mkdocs gh-deploy` 推送 `gh-pages` 分支上线
+> **适用仓库**：<https://github.com/ZVISION-lidar/wiki.git>（公开仓库）
+> **部署方式**：push `main` → GitHub Actions 自动构建 → `mkdocs gh-deploy` 推送 `gh-pages` 分支上线
+
+---
+
+## 目录
+
+- [1. 仓库分支模型](#1-仓库分支模型)
+- [2. 项目结构](#2-项目结构)
+- [3. 首次克隆仓库](#3-首次克隆仓库)
+- [4. 单次改动完整流程（4 个阶段）](#4-单次改动完整流程4-个阶段)
+- [5. 验证发布是否成功](#5-验证发布是否成功)
+- [6. 任务完成后清理](#6-任务完成后清理)
+- [7. 多人协作注意事项](#7-多人协作注意事项)
+- [8. 常见情况和恢复操作](#8-常见情况和恢复操作)
+- [9. 不要做的事](#9-不要做的事)
+- [10. 速查表](#10-速查表)
+- [11. 完整示例：改一个 typo 的全过程](#11-完整示例改一个-typo-的全过程)
 
 ---
 
@@ -11,11 +27,12 @@
 |---|---|---|
 | `main` | 线上发布分支 | ✅ 触发，push 后 1–3 分钟生效 |
 | `zvision_develop` | 集成分支，所有功能分支合并到这里 | ❌ 不触发 |
-| `feature/<名字>` | 你的个人功能分支，基于 zvision_develop 建 | ❌ 不触发 |
+| `feature/<名字>` | 个人功能分支，基于 `zvision_develop` 创建 | ❌ 不触发 |
 
 **核心规则：**
 
 - ❌ **永远不要直接在 `main` 上 commit**
+- ❌ **永远不要直接在 `zvision_develop` 上 commit**
 - ✅ 改动流程：从 `zvision_develop` 拉 `feature/<名字>` → 在 feature 上改 → push → 合并到 `zvision_develop` → 测试稳定后从 `zvision_develop` 发布到 `main`
 
 ---
@@ -46,28 +63,40 @@ my_wiki/
 
 ---
 
-## 3. 单次改动完整流程（4 个阶段）
+## 3. 首次克隆仓库
+
+如果你还没有本地副本，先克隆并切到集成分支：
+
+```powershell
+git clone https://github.com/ZVISION-lidar/wiki.git my_wiki
+cd my_wiki
+git switch zvision_develop
+```
+
+---
+
+## 4. 单次改动完整流程（4 个阶段）
 
 ### 阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支
 
 ```powershell
 # 1. 切到 zvision_develop
 cd my_wiki
-git checkout zvision_develop
+git switch zvision_develop
 
 # 2. 同步远端最新 zvision_develop
 git pull origin zvision_develop
 
 # 3. 基于 zvision_develop 建自己的功能分支
 #    分支名建议：feature/<姓名-功能>，如 feature/tzy-fix-nz1-slam
-git checkout -b feature/tzy-fix-nz1-slam
+git switch -c feature/tzy-fix-nz1-slam
 ```
 
 ### 阶段 B：在功能分支上改文档并提交
 
 ```powershell
-# 1. 用任意编辑器，如vscode 打开 docs/ 下的文件进行修改
-#    建议修改后，先在 /my_wiki 下新建终端，输入：
+# 1. 用任意编辑器（如 VS Code）打开 docs/ 下的文件进行修改
+#    建议修改后，先在 my_wiki 下新建终端，输入：
 #    mkdocs serve  → 浏览器打开 http://127.0.0.1:8000 查看修改效果
 
 # 2. 查看改动
@@ -77,9 +106,9 @@ git diff --stat         # 只看每个文件改了几行
 
 # 3. 提交
 git add -A
-git commit -m "docs(<模块>): 一句话描述这次改了什么"  # 如 git commit -m "docs<SLAM/fastlio2>: 增加使用说明"
+git commit -m "docs(<模块>): 一句话描述这次改了什么"
+# 示例：git commit -m "docs(SLAM/fastlio2): 增加使用说明"
 ```
-
 
 ### 阶段 C：推送功能分支并合并到 zvision_develop
 
@@ -88,24 +117,25 @@ git commit -m "docs(<模块>): 一句话描述这次改了什么"  # 如 git com
 git push origin feature/tzy-fix-nz1-slam
 
 # 2. 合并到 zvision_develop（必须用 --no-ff）
-git checkout zvision_develop
+git switch zvision_develop
 git merge --no-ff feature/tzy-fix-nz1-slam -m "Merge: <一句话描述>"
 
 # 3. 推送到远端
 git push origin zvision_develop
 ```
 
-⚠️ **必须用 `--no-ff`**（创建 merge commit），这样 main 的历史里能清楚看到每次合入的功能。
+!!! warning "必须用 --no-ff"
+    创建 merge commit，这样 `main` 的历史里能清楚看到每次合入的功能。
 
 ### 阶段 D：定期发布——把 zvision_develop 合并到 main 触发上线
 
 !!! note "什么时候发布？"
-    攒了一批改动、测试通过后，由维护者定期（按需，比如每天 / 每周 / 发布节点）从 zvision_develop 发布到 main。
+    攒了一批改动、测试通过后，由维护者定期（按需，比如每天 / 每周 / 发布节点）从 `zvision_develop` 发布到 `main`。
     日常单次改动不需要走这一步。
 
 ```powershell
 # 1. 切到 main
-git checkout main
+git switch main
 
 # 2. 同步远端 main（避免漏掉别人发布的内容）
 git pull origin main
@@ -117,28 +147,29 @@ git merge --no-ff zvision_develop -m "Release: <一句话>"
 git push origin main
 
 # 5. 切回 zvision_develop 继续工作
-git checkout zvision_develop
+git switch zvision_develop
 ```
 
-⚠️ **必须用 `--no-ff`**（创建 merge commit），让 `main` 历史里能看到每次发布的合并节点，避免 fast-forward 失败。
+!!! warning "必须用 --no-ff"
+    创建 merge commit，让 `main` 历史里能看到每次发布的合并节点，避免 fast-forward 失败。
 
 ---
 
-## 4. 验证发布是否成功
+## 5. 验证发布是否成功
 
-push `main` 后 1–3 分钟，访问下面链接刷新（**Ctrl+F5 强刷新**避开浏览器缓存）：
+push `main` 后 1–3 分钟，访问下面链接并刷新（**Ctrl+F5 强刷新**避开浏览器缓存）：
 
-- 🔗 https://zvision-lidar.github.io/wiki/
+- 🔗 <https://zvision-lidar.github.io/wiki/>
 
 也可以在 GitHub 仓库页 → **Actions** 标签查看构建是否成功（绿勾 ✅ = 已上线）。
 
 ---
 
-## 5. 任务完成后清理
+## 6. 任务完成后清理
 
 ```powershell
 # 1. 切回 zvision_develop（确保在 zvision_develop 上）
-git checkout zvision_develop
+git switch zvision_develop
 
 # 2. 删除本地功能分支
 git branch -d feature/tzy-fix-nz1-slam
@@ -148,25 +179,25 @@ git push origin --delete feature/tzy-fix-nz1-slam
 
 # 4. 开始下一个任务
 git pull origin zvision_develop
-git checkout -b feature/tzy-add-faq
+git switch -c feature/tzy-add-faq
 ```
 
 ---
 
-## 6. 多人协作注意事项
+## 7. 多人协作注意事项
 
 | 场景 | 做法 |
 |---|---|
-| 每次新任务 | 先 `git checkout zvision_develop && git pull` 再新建 `feature/<名字>` |
+| 每次新任务 | 先 `git switch zvision_develop && git pull` 再新建 `feature/<名字>` |
 | 多人同时改同一文件 | 先协商或错开时间，或拆成不同功能分支 |
 | 提交后发现还有问题 | 直接再 commit + push 覆盖 |
-| 功能分支合并有冲突 | 在本地 rebase 或 merge，解决冲突后 force push |
+| 功能分支合并有冲突 | 在本地 rebase 到最新 `zvision_develop`，解决冲突后用 `git push --force-with-lease`（比 `-f` 安全，若远端已被别人更新会拒绝推送） |
 
 ---
 
-## 7. 常见情况和恢复操作
+## 8. 常见情况和恢复操作
 
-### 7.1 改错了，还没 commit，想撤销
+### 8.1 改错了，还没 commit，想撤销
 
 ```bash
 git status                           # 看哪些文件被改了
@@ -174,7 +205,7 @@ git restore <文件路径>               # 撤销单个文件
 git restore .                        # 撤销当前目录所有改动（慎用！）
 ```
 
-### 7.2 已经 commit，但还没 push，想撤销最后一次 commit
+### 8.2 已经 commit，但还没 push，想撤销最后一次 commit
 
 ```bash
 git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
@@ -182,24 +213,24 @@ git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
 git reset HEAD~1                     # 撤销 commit，改动保留在工作区（更常用）
 ```
 
-### 7.3 已经 push 到功能分支，想撤销
+### 8.3 已经 push 到功能分支，想撤销
 
 修改后再 commit + push 一次即可。
 不要用 `git push -f`，除非确认没人在用这个分支。
 
-### 7.4 已经 merge 到 zvision_develop 了，想撤销
+### 8.4 已经 merge 到 zvision_develop 了，想撤销
 
-**最安全的做法**：新开一个 feature 分支修复，或者在 zvision_develop 上直接 commit 修复。
+**最安全的做法**：新开一个 feature 分支修复，或者在 `zvision_develop` 上直接 commit 修复。
 **不要**用 `git reset` + `git push -f zvision_develop`，会破坏历史。
 
-### 7.5 已经发布到 main 了，发现内容不对
+### 8.5 已经发布到 main 了，发现内容不对
 
-**最安全的做法**：重新改一遍 → 走完整流程修复 → 等下次发布到 main。
+**最安全的做法**：重新改一遍 → 走完整流程修复 → 等下次发布到 `main`。
 **不要**用 `git reset` + `git push -f main`，会破坏历史。
 
-### 7.6 `git merge --no-ff zvision_develop` 发布到 main 时报冲突
+### 8.6 `git merge --no-ff zvision_develop` 发布到 main 时报冲突
 
-理论上不会，因为 `main` 永远是 `zvision_develop` 的子集。如果真发生，多半是 `main` 上意外有了别的提交：
+正常情况下不会发生，因为 `main` 应该是 `zvision_develop` 的子集。如果真发生，多半是 `main` 上意外有了别的提交（有人违反了「不在 main 上直接 commit」的规则）：
 
 ```bash
 git status                           # 看冲突文件
@@ -211,11 +242,11 @@ git push origin main
 
 冲突复杂搞不定就找维护者帮忙。
 
-### 7.7 合并功能分支时有冲突
+### 8.7 合并功能分支时有冲突
 
 ```bash
 # 切到你的功能分支
-git checkout feature/tzy-fix-nz1-slam
+git switch feature/tzy-fix-nz1-slam
 
 # rebase 到最新 zvision_develop
 git fetch origin
@@ -232,9 +263,9 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ---
 
-## 8. 不要做的事 ❌
+## 9. 不要做的事
 
-- ❌ 在 `main` 上直接 commit（必须通过 zvision_develop 合并过去）
+- ❌ 在 `main` 上直接 commit（必须通过 `zvision_develop` 合并过去）
 - ❌ 在 `zvision_develop` 上直接 commit（必须通过 feature 分支合并进去）
 - ❌ `git push -f`（强制推送，会覆盖远端历史）
 - ❌ `git reset --hard` 后立刻 `git push -f`
@@ -242,13 +273,13 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ---
 
-## 9. 速查表
+## 10. 速查表
 
 | 想做什么 | 命令 |
 |---|---|
-| 同步 zvision_develop | `git checkout zvision_develop && git pull origin zvision_develop` |
-| 新建功能分支 | `git checkout -b feature/<名字>` |
-| 切换分支 | `git checkout <分支名>` |
+| 同步 zvision_develop | `git switch zvision_develop && git pull origin zvision_develop` |
+| 新建功能分支 | `git switch -c feature/<名字>` |
+| 切换分支 | `git switch <分支名>` |
 | 当前是哪个分支 | `git branch --show-current` |
 | 看当前改了什么 | `git status` |
 | 看具体行级改动 | `git diff` |
@@ -257,22 +288,22 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 | 推送到远端 | `git push origin <分支名>` |
 | 删除本地分支 | `git branch -d <分支名>` |
 | 删除远端分支 | `git push origin --delete <分支名>` |
-| 发布到 main | `git checkout main && git pull && git merge --no-ff zvision_develop && git push` |
+| 发布到 main | `git switch main && git pull && git merge --no-ff zvision_develop && git push` |
 | 拉取远端最新 | `git pull origin <分支>` |
 | 本地预览网站 | `mkdocs serve` |
 
 ---
 
-## 10. 完整示例：改一个 typo 的全过程
+## 11. 完整示例：改一个 typo 的全过程
 
-假设要把 `01-产品概述.md` 里 "NZ1 系列" 改成 "NZ1 系列产品"：
+假设要把 `01-产品概述.md` 里「NZ1 系列」改成「NZ1 系列产品」：
 
 ```powershell
 # 阶段 A：建功能分支
 cd my_wiki
-git checkout zvision_develop
+git switch zvision_develop
 git pull origin zvision_develop
-git checkout -b feature/tzy-fix-nz1-title
+git switch -c feature/tzy-fix-nz1-title
 
 # 阶段 B：改文档 + 提交
 # 用 VS Code / Cursor 编辑 docs/zvision_nz_series/NZ1/01-产品概述.md
@@ -282,18 +313,18 @@ git commit -m "docs(NZ1): fix typo in product overview"
 
 # 阶段 C：推到远端 + 合并到 zvision_develop
 git push origin feature/tzy-fix-nz1-title
-git checkout zvision_develop
+git switch zvision_develop
 git merge --no-ff feature/tzy-fix-nz1-title -m "Merge: fix nz1 title typo"
 git push origin zvision_develop
 
 # 阶段 D（定期发布时由维护者执行）：发布到 main
-git checkout main
+git switch main
 git pull origin main
 git merge --no-ff zvision_develop -m "Release: typo fix in NZ1 product overview"
 git push origin main
-git checkout zvision_develop
+git switch zvision_develop
 
-# 1-3 分钟后访问 https://zvision-lidar.github.io/wiki/ 验证（Ctrl+F5）
+# 1–3 分钟后访问 https://zvision-lidar.github.io/wiki/ 验证（Ctrl+F5）
 
 # 清理
 git branch -d feature/tzy-fix-nz1-title
