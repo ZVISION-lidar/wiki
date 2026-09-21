@@ -10,14 +10,15 @@
 - [1. 仓库分支模型](#1-仓库分支模型)
 - [2. 项目结构](#2-项目结构)
 - [3. 首次克隆仓库](#3-首次克隆仓库)
-- [4. 单次改动完整流程（4 个阶段）](#4-单次改动完整流程4-个阶段)
-- [5. 验证发布是否成功](#5-验证发布是否成功)
-- [6. 任务完成后清理](#6-任务完成后清理)
-- [7. 多人协作注意事项](#7-多人协作注意事项)
-- [8. 常见情况和恢复操作](#8-常见情况和恢复操作)
-- [9. 不要做的事](#9-不要做的事)
-- [10. 速查表](#10-速查表)
-- [11. 完整示例：改一个 typo 的全过程](#11-完整示例改一个-typo-的全过程)
+- [4. 安装 MkDocs 及依赖](#4-安装-mkdocs-及依赖)
+- [5. 单次改动完整流程（4 个阶段）](#5-单次改动完整流程4-个阶段)
+- [6. 验证发布是否成功](#6-验证发布是否成功)
+- [7. 任务完成后清理](#7-任务完成后清理)
+- [8. 多人协作注意事项](#8-多人协作注意事项)
+- [9. 常见情况和恢复操作](#9-常见情况和恢复操作)
+- [10. 不要做的事](#10-不要做的事)
+- [11. 速查表](#11-速查表)
+- [12. 完整示例：改一个 typo 的全过程](#12-完整示例改一个-typo-的全过程)
 
 ---
 
@@ -40,7 +41,7 @@
 ## 2. 项目结构
 
 ```
-my_wiki/
+wiki/
 ├── mkdocs.yml          ← 站点配置文件（导航、主题、插件）
 ├── docs/               ← 所有文档源文件（Markdown + 资源）
 │   ├── index.md        ← 首页
@@ -68,20 +69,60 @@ my_wiki/
 如果你还没有本地副本，先克隆并切到集成分支：
 
 ```powershell
-git clone https://github.com/ZVISION-lidar/wiki.git my_wiki
-cd my_wiki
+git clone https://github.com/ZVISION-lidar/wiki.git
+cd wiki
 git switch zvision_develop
+```
+
+!!! note "关于本地目录名"
+    不写本地目录名时，Git 默认用仓库名 `wiki` 作为文件夹名。
+    后续所有命令都在 `wiki/` 目录下执行。
+
+---
+
+## 4. 安装 MkDocs 及依赖
+
+本地预览是必须的，先装好 MkDocs。
+
+### 4.1 检查 Python
+
+```powershell
+python --version
+```
+
+如果没有，去 <https://www.python.org/downloads/> 下载安装，安装时**勾选 "Add Python to PATH"**。
+
+### 4.2 安装 MkDocs 与 Material 主题
+
+```powershell
+pip install mkdocs mkdocs-material
+```
+
+### 4.3 关于插件
+
+`mkdocs.yml` 里用到的插件（如 `pymdownx`、`minify`、`git-revision-date-localized`、`mermaid2` 等）会在 `mkdocs serve` 首次运行时**自动安装**，无需手动 `pip install`。
+
+### 4.4 验证安装
+
+```powershell
+mkdocs --version
+```
+
+如果提示 `mkdocs` 命令找不到，改用：
+
+```powershell
+python -m mkdocs --version
 ```
 
 ---
 
-## 4. 单次改动完整流程（4 个阶段）
+## 5. 单次改动完整流程（4 个阶段）
 
 ### 阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支
 
 ```powershell
 # 1. 切到 zvision_develop
-cd my_wiki
+cd wiki
 git switch zvision_develop
 
 # 2. 同步远端最新 zvision_develop
@@ -96,15 +137,21 @@ git switch -c feature/tzy-fix-nz1-slam
 
 ```powershell
 # 1. 用任意编辑器（如 VS Code）打开 docs/ 下的文件进行修改
-#    建议修改后，先在 my_wiki 下新建终端，输入：
-#    mkdocs serve  → 浏览器打开 http://127.0.0.1:8000 查看修改效果
 
-# 2. 查看改动
+# 2. 修改后必须本地预览。在 wiki 目录下运行：
+mkdocs serve
+#    浏览器打开 http://127.0.0.1:8000 实时预览，改文件会自动刷新
+#    如果 mkdocs 命令找不到，改用：
+#    python -m mkdocs serve
+#    如果端口 8000 被占用，指定其他端口：
+#    mkdocs serve -a 127.0.0.1:8001
+
+# 3. 查看改动
 git status              # 列出修改 / 新增 / 删除的文件
 git diff                # 查看具体行级改动
 git diff --stat         # 只看每个文件改了几行
 
-# 3. 提交
+# 4. 提交
 git add -A
 git commit -m "docs(<模块>): 一句话描述这次改了什么"
 # 示例：git commit -m "docs(SLAM/fastlio2): 增加使用说明"
@@ -155,7 +202,7 @@ git switch zvision_develop
 
 ---
 
-## 5. 验证发布是否成功
+## 6. 验证发布是否成功
 
 push `main` 后 1–3 分钟，访问下面链接并刷新（**Ctrl+F5 强刷新**避开浏览器缓存）：
 
@@ -165,7 +212,7 @@ push `main` 后 1–3 分钟，访问下面链接并刷新（**Ctrl+F5 强刷新
 
 ---
 
-## 6. 任务完成后清理
+## 7. 任务完成后清理
 
 ```powershell
 # 1. 切回 zvision_develop（确保在 zvision_develop 上）
@@ -184,7 +231,7 @@ git switch -c feature/tzy-add-faq
 
 ---
 
-## 7. 多人协作注意事项
+## 8. 多人协作注意事项
 
 | 场景 | 做法 |
 |---|---|
@@ -195,9 +242,9 @@ git switch -c feature/tzy-add-faq
 
 ---
 
-## 8. 常见情况和恢复操作
+## 9. 常见情况和恢复操作
 
-### 8.1 改错了，还没 commit，想撤销
+### 9.1 改错了，还没 commit，想撤销
 
 ```bash
 git status                           # 看哪些文件被改了
@@ -205,7 +252,7 @@ git restore <文件路径>               # 撤销单个文件
 git restore .                        # 撤销当前目录所有改动（慎用！）
 ```
 
-### 8.2 已经 commit，但还没 push，想撤销最后一次 commit
+### 9.2 已经 commit，但还没 push，想撤销最后一次 commit
 
 ```bash
 git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
@@ -213,22 +260,22 @@ git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
 git reset HEAD~1                     # 撤销 commit，改动保留在工作区（更常用）
 ```
 
-### 8.3 已经 push 到功能分支，想撤销
+### 9.3 已经 push 到功能分支，想撤销
 
 修改后再 commit + push 一次即可。
 不要用 `git push -f`，除非确认没人在用这个分支。
 
-### 8.4 已经 merge 到 zvision_develop 了，想撤销
+### 9.4 已经 merge 到 zvision_develop 了，想撤销
 
 **最安全的做法**：新开一个 feature 分支修复，或者在 `zvision_develop` 上直接 commit 修复。
 **不要**用 `git reset` + `git push -f zvision_develop`，会破坏历史。
 
-### 8.5 已经发布到 main 了，发现内容不对
+### 9.5 已经发布到 main 了，发现内容不对
 
 **最安全的做法**：重新改一遍 → 走完整流程修复 → 等下次发布到 `main`。
 **不要**用 `git reset` + `git push -f main`，会破坏历史。
 
-### 8.6 `git merge --no-ff zvision_develop` 发布到 main 时报冲突
+### 9.6 `git merge --no-ff zvision_develop` 发布到 main 时报冲突
 
 正常情况下不会发生，因为 `main` 应该是 `zvision_develop` 的子集。如果真发生，多半是 `main` 上意外有了别的提交（有人违反了「不在 main 上直接 commit」的规则）：
 
@@ -242,7 +289,7 @@ git push origin main
 
 冲突复杂搞不定就找维护者帮忙。
 
-### 8.7 合并功能分支时有冲突
+### 9.7 合并功能分支时有冲突
 
 ```bash
 # 切到你的功能分支
@@ -263,7 +310,7 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ---
 
-## 9. 不要做的事
+## 10. 不要做的事
 
 - ❌ 在 `main` 上直接 commit（必须通过 `zvision_develop` 合并过去）
 - ❌ 在 `zvision_develop` 上直接 commit（必须通过 feature 分支合并进去）
@@ -273,10 +320,11 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ---
 
-## 10. 速查表
+## 11. 速查表
 
 | 想做什么 | 命令 |
 |---|---|
+| 安装 MkDocs | `pip install mkdocs mkdocs-material` |
 | 同步 zvision_develop | `git switch zvision_develop && git pull origin zvision_develop` |
 | 新建功能分支 | `git switch -c feature/<名字>` |
 | 切换分支 | `git switch <分支名>` |
@@ -294,19 +342,20 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ---
 
-## 11. 完整示例：改一个 typo 的全过程
+## 12. 完整示例：改一个 typo 的全过程
 
 假设要把 `01-产品概述.md` 里「NZ1 系列」改成「NZ1 系列产品」：
 
 ```powershell
 # 阶段 A：建功能分支
-cd my_wiki
+cd wiki
 git switch zvision_develop
 git pull origin zvision_develop
 git switch -c feature/tzy-fix-nz1-title
 
-# 阶段 B：改文档 + 提交
-# 用 VS Code / Cursor 编辑 docs/zvision_nz_series/NZ1/01-产品概述.md
+# 阶段 B：改文档 + 本地预览 + 提交
+# 用 VS Code 编辑 docs/zvision_nz_series/NZ1/01-产品概述.md
+mkdocs serve                # 浏览器打开 http://127.0.0.1:8000 预览
 git diff
 git add -A
 git commit -m "docs(NZ1): fix typo in product overview"
