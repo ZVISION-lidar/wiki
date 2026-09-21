@@ -1,8 +1,7 @@
-# Wiki 仓库 Git 操作手册
+# ZVISION Wiki Git 操作手册
 
-> 适用仓库：`git@github.com:ManifoldTechLtd/wiki.git`
-> 本地路径：`/home/hugo/git_wiki/wiki`
-> GitHub Pages 部署：自动构建 `master` 分支的 `docs/` 目录 → https://manifoldtechltd.github.io/wiki/
+> 适用仓库：`https://github.com/ZVISION-lidar/wiki.git`（公开仓库）
+> GitHub Pages 部署：push main → GitHub Actions 自动构建 → `mkdocs gh-deploy` 推送 `gh-pages` 分支上线
 
 ---
 
@@ -10,139 +9,164 @@
 
 | 分支 | 用途 | 是否触发 GitHub Pages 构建 |
 |---|---|---|
-| `master` | 线上发布分支 | ✅ 触发，push 后 1–3 分钟生效 |
-| `odin_develop` | 开发分支，所有日常改动先在这上面 commit | ❌ 不触发 |
+| `main` | 线上发布分支 | ✅ 触发，push 后 1–3 分钟生效 |
+| `zvision_develop` | 集成分支，所有功能分支合并到这里 | ❌ 不触发 |
+| `feature/<名字>` | 你的个人功能分支，基于 zvision_develop 建 | ❌ 不触发 |
 
-**规则：永远不要直接在 `master` 上 commit**。
-所有改动 → 先在 `odin_develop` commit → push → 再合并到 `master` → push。
+**核心规则：**
 
----
-
-## 2. 中英文双语维护约定
-
-仓库下中英文是两份独立 markdown：
-
-```
-docs/odin_series/odin1/X.md         ← 中文原文（主）
-docs/en/odin_series/odin1/X.md      ← 英文翻译（副）
-```
-
-**改一处必改对应另一处**（除非只改 typo / 仅改某一种语言的术语）。
-图片 / PDF / 代码资源只放在中文目录下的 `assets/`，英文页通过 `{{ '...' | relative_url }}` 引用，**不要复制资源到 `docs/en/assets/`**。
+- ❌ **永远不要直接在 `main` 上 commit**
+- ✅ 改动流程：从 `zvision_develop` 拉 `feature/<名字>` → 在 feature 上改 → push → 合并到 `zvision_develop` → 测试稳定后从 `zvision_develop` 发布到 `main`
 
 ---
 
-## 3. 标准发布流程（最常用，6 步）
+## 2. 项目结构
 
-每次改完文档（不管改了几个文件），按这 6 步走：
-
-### 第 1 步：确认当前在 `odin_develop` 分支
-
-```bash
-cd /home/hugo/git_wiki/wiki
-git status
+```
+my_wiki/
+├── mkdocs.yml          ← 站点配置文件（导航、主题、插件）
+├── docs/               ← 所有文档源文件（Markdown + 资源）
+│   ├── index.md        ← 首页
+│   ├── config.md
+│   ├── GIT_WORKFLOW.md ← 本手册
+│   ├── zvision_nz_series/
+│   │   ├── index.md
+│   │   └── NZ1/
+│   │       ├── 01-产品概述.md
+│   │       ├── 02-硬件说明.md
+│   │       └── ...
+│   └── stylesheets/
+│       └── extra.css   ← 自定义 CSS
+└── site/               ← mkdocs build 生成的静态站点（无需上传 git）
 ```
 
-输出第一行应该是 `On branch odin_develop`。如果不是：
+!!! note "关于 site/ 目录"
+    `site/` 是 `mkdocs build` 的输出目录，已在 `.gitignore` 中忽略，不会被提交。
+    实际部署由 GitHub Actions 执行 `mkdocs gh-deploy`，自动构建并推送到 `gh-pages` 分支。
 
-```bash
-git checkout odin_develop
+---
+
+## 3. 单次改动完整流程（4 个阶段）
+
+### 阶段 A：开始任务前，同步 zvision_develop 并建自己的功能分支
+
+```powershell
+# 1. 切到 zvision_develop
+cd my_wiki
+git checkout zvision_develop
+
+# 2. 同步远端最新 zvision_develop
+git pull origin zvision_develop
+
+# 3. 基于 zvision_develop 建自己的功能分支
+#    分支名建议：feature/<姓名-功能>，如 feature/tzy-fix-nz1-slam
+git checkout -b feature/tzy-fix-nz1-slam
 ```
 
-### 第 2 步：查看改了哪些文件
+### 阶段 B：在功能分支上改文档并提交
 
-```bash
+```powershell
+# 1. 用任意编辑器，如vscode 打开 docs/ 下的文件进行修改
+#    建议修改后，先在 /my_wiki 下新建终端，输入：
+#    mkdocs serve  → 浏览器打开 http://127.0.0.1:8000 查看修改效果
+
+# 2. 查看改动
 git status              # 列出修改 / 新增 / 删除的文件
 git diff                # 查看具体行级改动
 git diff --stat         # 只看每个文件改了几行
+
+# 3. 提交
+git add -A
+git commit -m "docs(<模块>): 一句话描述这次改了什么"  # 如 git commit -m "docs<SLAM/fastlio2>: 增加使用说明"
 ```
 
-### 第 3 步：把所有改动添加到暂存区并 commit
 
-```bash
-git add -A              # -A 表示所有改动（含新增、删除）
-git commit -m "docs(odin1): 一句话描述这次改了什么"
+### 阶段 C：推送功能分支并合并到 zvision_develop
+
+```powershell
+# 1. 推到远端
+git push origin feature/tzy-fix-nz1-slam
+
+# 2. 合并到 zvision_develop（必须用 --no-ff）
+git checkout zvision_develop
+git merge --no-ff feature/tzy-fix-nz1-slam -m "Merge: <一句话描述>"
+
+# 3. 推送到远端
+git push origin zvision_develop
 ```
 
-**commit message 建议格式**（方便你以后回看）：
+⚠️ **必须用 `--no-ff`**（创建 merge commit），这样 main 的历史里能清楚看到每次合入的功能。
 
-```
-docs(<模块>): <一句话总结>
+### 阶段 D：定期发布——把 zvision_develop 合并到 main 触发上线
 
-- <文件 1>: <改了什么>
-- <文件 2>: <改了什么>
-- 中英已同步 / 仅中文 / 仅英文
-```
+!!! note "什么时候发布？"
+    攒了一批改动、测试通过后，由维护者定期（按需，比如每天 / 每周 / 发布节点）从 zvision_develop 发布到 main。
+    日常单次改动不需要走这一步。
 
-实例：
+```powershell
+# 1. 切到 main
+git checkout main
 
-```
-docs(odin1): IP66 spec correction, FAQ Q2.7 USB cleanup (zh+en)
+# 2. 同步远端 main（避免漏掉别人发布的内容）
+git pull origin main
 
-- 14. Technical Specifications: IP67 -> IP66
-- 15. FAQ: add Q2.7 'LIBUSB_ERROR_BUSY' with SIGINT cleanup script
-- 中英已同步
-```
+# 3. 合并 zvision_develop 到 main（必须用 --no-ff）
+git merge --no-ff zvision_develop -m "Release: <一句话>"
 
-### 第 4 步：把 `odin_develop` 推到远端
+# 4. 推送到远端，触发 Pages 构建
+git push origin main
 
-```bash
-git push origin odin_develop
-```
-
-此时改动**还没上线**，因为 GitHub Pages 只看 `master`。
-
-### 第 5 步：合并到 `master` 并推送
-
-```bash
-git checkout master
-git merge --no-ff odin_develop -m "Merge: <一句话>"
-git push origin master
+# 5. 切回 zvision_develop 继续工作
+git checkout zvision_develop
 ```
 
-⚠️ **必须用 `--no-ff`**（创建 merge commit）。
-原因：仓库历史里 `master` 已经有大量 merge commit，普通 `git merge`（默认 fast-forward）会失败报 `Not possible to fast-forward`。`--no-ff` 永远成功，且历史更清晰。
-
-### 第 6 步：切回 `odin_develop` 继续工作
-
-```bash
-git checkout odin_develop
-```
-
----
-
-### 一键脚本（可选）
-
-把上面 4–6 步合成一行，每次改完文档执行即可：
-
-```bash
-git add -A && \
-git commit -m "docs: <一句话>" && \
-git push origin odin_develop && \
-git checkout master && \
-git merge --no-ff odin_develop -m "Merge: <一句话>" && \
-git push origin master && \
-git checkout odin_develop
-```
-
-把两处 `<一句话>` 替换成实际描述就行。
+⚠️ **必须用 `--no-ff`**（创建 merge commit），让 `main` 历史里能看到每次发布的合并节点，避免 fast-forward 失败。
 
 ---
 
 ## 4. 验证发布是否成功
 
-push `master` 后 1–3 分钟，访问下面任一链接刷新（**Ctrl+F5 强刷新**避开浏览器缓存）：
+push `main` 后 1–3 分钟，访问下面链接刷新（**Ctrl+F5 强刷新**避开浏览器缓存）：
 
-- 🇨🇳 中文站：https://manifoldtechltd.github.io/wiki/
-- 🇬🇧 英文站：https://manifoldtechltd.github.io/wiki/en/
+- 🔗 https://zvision-lidar.github.io/wiki/
 
-也可以在 GitHub 仓库页 → **Actions** 标签查看 `pages-build-deployment` 是否成功（绿勾✅ = 已上线）。
+也可以在 GitHub 仓库页 → **Actions** 标签查看构建是否成功（绿勾 ✅ = 已上线）。
 
 ---
 
-## 5. 常见情况和恢复操作
+## 5. 任务完成后清理
 
-### 5.1 改错了，还没 commit，想撤销
+```powershell
+# 1. 切回 zvision_develop（确保在 zvision_develop 上）
+git checkout zvision_develop
+
+# 2. 删除本地功能分支
+git branch -d feature/tzy-fix-nz1-slam
+
+# 3. 删除远端功能分支（可选，合并后可以顺手删掉）
+git push origin --delete feature/tzy-fix-nz1-slam
+
+# 4. 开始下一个任务
+git pull origin zvision_develop
+git checkout -b feature/tzy-add-faq
+```
+
+---
+
+## 6. 多人协作注意事项
+
+| 场景 | 做法 |
+|---|---|
+| 每次新任务 | 先 `git checkout zvision_develop && git pull` 再新建 `feature/<名字>` |
+| 多人同时改同一文件 | 先协商或错开时间，或拆成不同功能分支 |
+| 提交后发现还有问题 | 直接再 commit + push 覆盖 |
+| 功能分支合并有冲突 | 在本地 rebase 或 merge，解决冲突后 force push |
+
+---
+
+## 7. 常见情况和恢复操作
+
+### 7.1 改错了，还没 commit，想撤销
 
 ```bash
 git status                           # 看哪些文件被改了
@@ -150,7 +174,7 @@ git restore <文件路径>               # 撤销单个文件
 git restore .                        # 撤销当前目录所有改动（慎用！）
 ```
 
-### 5.2 已经 commit，但还没 push，想撤销最后一次 commit
+### 7.2 已经 commit，但还没 push，想撤销最后一次 commit
 
 ```bash
 git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
@@ -158,91 +182,120 @@ git reset --soft HEAD~1              # 撤销 commit，改动保留在暂存区
 git reset HEAD~1                     # 撤销 commit，改动保留在工作区（更常用）
 ```
 
-### 5.3 已经 push 到 odin_develop，但还没合并到 master，想撤销
+### 7.3 已经 push 到功能分支，想撤销
 
-修改后再 commit + push 一次即可（push 上去的改动可以被新 commit 覆盖）。
+修改后再 commit + push 一次即可。
 不要用 `git push -f`，除非确认没人在用这个分支。
 
-### 5.4 已经 push 到 master 了，发现内容不对
+### 7.4 已经 merge 到 zvision_develop 了，想撤销
 
-**最安全的做法**：重新改一遍 → 走完整 6 步流程发新 commit 修复。
-**不要**用 `git reset` + `git push -f master`，会破坏历史。
+**最安全的做法**：新开一个 feature 分支修复，或者在 zvision_develop 上直接 commit 修复。
+**不要**用 `git reset` + `git push -f zvision_develop`，会破坏历史。
 
-### 5.5 `git merge --no-ff odin_develop` 报冲突
+### 7.5 已经发布到 main 了，发现内容不对
 
-理论上不会，因为 `master` 永远是 `odin_develop` 的子集（你只往 odin_develop 上 commit）。
-如果真发生，多半是 `master` 上意外有了别的提交。这时候：
+**最安全的做法**：重新改一遍 → 走完整流程修复 → 等下次发布到 main。
+**不要**用 `git reset` + `git push -f main`，会破坏历史。
+
+### 7.6 `git merge --no-ff zvision_develop` 发布到 main 时报冲突
+
+理论上不会，因为 `main` 永远是 `zvision_develop` 的子集。如果真发生，多半是 `main` 上意外有了别的提交：
 
 ```bash
 git status                           # 看冲突文件
 # 手动编辑冲突文件，删掉 <<<<<<< / ======= / >>>>>>> 标记
 git add <冲突文件>
 git commit                           # 完成合并
-git push origin master
+git push origin main
 ```
 
-冲突复杂搞不定就找我帮忙。
+冲突复杂搞不定就找维护者帮忙。
+
+### 7.7 合并功能分支时有冲突
+
+```bash
+# 切到你的功能分支
+git checkout feature/tzy-fix-nz1-slam
+
+# rebase 到最新 zvision_develop
+git fetch origin
+git rebase origin/zvision_develop
+```
+
+手动解决冲突后（删掉 `<<<<<<<` / `=======` / `>>>>>>>` 标记），继续：
+
+```bash
+git add <冲突文件>
+git rebase --continue
+git push --force-with-lease origin feature/tzy-fix-nz1-slam
+```
 
 ---
 
-## 6. 不要做的事 ❌
+## 8. 不要做的事 ❌
 
-- ❌ 直接在 `master` 上 commit
+- ❌ 在 `main` 上直接 commit（必须通过 zvision_develop 合并过去）
+- ❌ 在 `zvision_develop` 上直接 commit（必须通过 feature 分支合并进去）
 - ❌ `git push -f`（强制推送，会覆盖远端历史）
 - ❌ `git reset --hard` 后立刻 `git push -f`
-- ❌ 把改动同时 commit 在 `master` 和 `odin_develop` 上（会双倍 commit）
-- ❌ 提交时漏掉中英文同步（除非这次故意只改一边）
+- ❌ 多人同时在同一个 feature 分支上工作（每人用自己分支）
 
 ---
 
-## 7. 速查表
+## 9. 速查表
 
 | 想做什么 | 命令 |
 |---|---|
+| 同步 zvision_develop | `git checkout zvision_develop && git pull origin zvision_develop` |
+| 新建功能分支 | `git checkout -b feature/<名字>` |
+| 切换分支 | `git checkout <分支名>` |
+| 当前是哪个分支 | `git branch --show-current` |
 | 看当前改了什么 | `git status` |
 | 看具体行级改动 | `git diff` |
 | 看简要改动统计 | `git diff --stat` |
-| 看历史提交 | `git log --oneline -20` |
-| 看某个文件历史 | `git log --oneline -- "<文件路径>"` |
-| 切换分支 | `git checkout <分支名>` |
-| 当前是哪个分支 | `git branch --show-current` |
-| 取消未 commit 的改动 | `git restore <文件>` |
-| 撤销最后一次 commit | `git reset HEAD~1` |
+| 提交 | `git add -A && git commit -m "..."` |
+| 推送到远端 | `git push origin <分支名>` |
+| 删除本地分支 | `git branch -d <分支名>` |
+| 删除远端分支 | `git push origin --delete <分支名>` |
+| 发布到 main | `git checkout main && git pull && git merge --no-ff zvision_develop && git push` |
 | 拉取远端最新 | `git pull origin <分支>` |
+| 本地预览网站 | `mkdocs serve` |
 
 ---
 
-## 8. 完整示例：改一个 typo 的全过程
+## 10. 完整示例：改一个 typo 的全过程
 
-假设要把 `15. FAQ.md` 里 "请鞋按 SIGINT" 改成 "请按 SIGINT"：
+假设要把 `01-产品概述.md` 里 "NZ1 系列" 改成 "NZ1 系列产品"：
 
-```bash
-# 1. 进入仓库
-cd /home/hugo/git_wiki/wiki
+```powershell
+# 阶段 A：建功能分支
+cd my_wiki
+git checkout zvision_develop
+git pull origin zvision_develop
+git checkout -b feature/tzy-fix-nz1-title
 
-# 2. 确认在 odin_develop 上
-git status
-# On branch odin_develop ✅
-
-# 3. 改文件（用 VS Code / Qoder 编辑保存）
-# 改 docs/odin_series/odin1/15. FAQ.md
-# 改 docs/en/odin_series/odin1/15. FAQ.md（如果英文版也错了）
-
-# 4. 看改动
+# 阶段 B：改文档 + 提交
+# 用 VS Code / Cursor 编辑 docs/zvision_nz_series/NZ1/01-产品概述.md
 git diff
-
-# 5. 提交并发布
 git add -A
-git commit -m "docs(odin1): fix typo in FAQ Q2.7 (zh+en)"
-git push origin odin_develop
-git checkout master
-git merge --no-ff odin_develop -m "Merge: typo fix in FAQ Q2.7"
-git push origin master
-git checkout odin_develop
+git commit -m "docs(NZ1): fix typo in product overview"
 
-# 6. 1-3 分钟后访问 https://manifoldtechltd.github.io/wiki/ 验证（Ctrl+F5）
+# 阶段 C：推到远端 + 合并到 zvision_develop
+git push origin feature/tzy-fix-nz1-title
+git checkout zvision_develop
+git merge --no-ff feature/tzy-fix-nz1-title -m "Merge: fix nz1 title typo"
+git push origin zvision_develop
+
+# 阶段 D（定期发布时由维护者执行）：发布到 main
+git checkout main
+git pull origin main
+git merge --no-ff zvision_develop -m "Release: typo fix in NZ1 product overview"
+git push origin main
+git checkout zvision_develop
+
+# 1-3 分钟后访问 https://zvision-lidar.github.io/wiki/ 验证（Ctrl+F5）
+
+# 清理
+git branch -d feature/tzy-fix-nz1-title
+git push origin --delete feature/tzy-fix-nz1-title
 ```
-
----
-
-如果遇到任何 git 报错搞不定，把 `git status` 的完整输出发给我即可。
