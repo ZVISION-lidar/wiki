@@ -40,7 +40,7 @@
 ## 2. 项目结构
 
 ```
-my_wiki/
+wiki/
 ├── mkdocs.yml          ← 站点配置文件（导航、主题、插件）
 ├── docs/               ← 所有文档源文件（Markdown + 资源）
 │   ├── index.md        ← 首页
@@ -68,8 +68,8 @@ my_wiki/
 如果你还没有本地副本，先克隆并切到集成分支：
 
 ```powershell
-git clone https://github.com/ZVISION-lidar/wiki.git my_wiki
-cd my_wiki
+git clone https://github.com/ZVISION-lidar/wiki.git
+cd wiki
 git switch zvision_develop
 ```
 
@@ -81,7 +81,7 @@ git switch zvision_develop
 
 ```powershell
 # 1. 切到 zvision_develop
-cd my_wiki
+cd wiki
 git switch zvision_develop
 
 # 2. 同步远端最新 zvision_develop
@@ -96,7 +96,7 @@ git switch -c feature/tzy-fix-nz1-slam
 
 ```powershell
 # 1. 用任意编辑器（如 VS Code）打开 docs/ 下的文件进行修改
-#    建议修改后，先在 my_wiki 下新建终端，输入：
+#    建议修改后，先在 wiki 下新建终端，输入：
 #    mkdocs serve  → 浏览器打开 http://127.0.0.1:8000 查看修改效果
 
 # 2. 查看改动
@@ -300,7 +300,7 @@ git push --force-with-lease origin feature/tzy-fix-nz1-slam
 
 ```powershell
 # 阶段 A：建功能分支
-cd my_wiki
+cd wiki
 git switch zvision_develop
 git pull origin zvision_develop
 git switch -c feature/tzy-fix-nz1-title
