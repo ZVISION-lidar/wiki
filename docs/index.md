@@ -1,22 +1,33 @@
-# Welcome to MkDocs
+# ZVISION NZ 系列
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+> 一径科技（ZVISION）面向泛机器人领域推出的一款全场景广角中短距激光雷达产品
 
-## Commands
+本系列页汇总 ZVISION Wiki 中涉及 NZ 系列产品。选择一个入口开始：
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+---
 
-## Project layout
+## 产品文档
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
 
-        
+| 维度 | 详细规格 |
+|:---|:---|
+| **超高性能空间感知** | 70m / 30m 双档测距 · 240°×90° 视场角 · 70 万点/秒 |
+| **小巧全能工业设计** | 280g · 100×62×43mm · IP66 · 12-24V · 抗 32G 冲击 |
+....
 
-✅ GitHub Actions 自动部署测试成功
+👉 [进入 NZ 系列产品  →](zvision_nz_series/NZ系列/产品总览.md){ .md-button }
 
+---
+
+## 通用前置要求
+
+| 工具 | 版本要求 |
+| --- | --- |
+| Python | >= 3.8 |
+| pip | 最新版 |
+| Git | 最新版 |
+
+
+## 下一步
+
+- 📖 阅读 [阅读提示](zvision_nz_series/NZ系列/阅读提示.md)
