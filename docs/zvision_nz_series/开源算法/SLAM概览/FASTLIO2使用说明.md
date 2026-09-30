@@ -3,7 +3,7 @@
 > ZVISION_NZ系列 在 **ROS 1 (Melodic / Noetic)** 或 **ROS 2 (Humble)** 下使用 FAST-LIO2 的指南。
 
 
-![NZ5](../assets/img/fastlio2_zvsion_nz5mt_demo.gif){ .nb-cover-full-img }
+![NZ5](../../assets/img/fastlio2_zvsion_nz5mt_demo.gif){ .nb-cover-full-img }
 
 ---
 

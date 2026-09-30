@@ -34,38 +34,47 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - 首页: index.md
-  - 快速上手:
-      - zvision_nz_series/quickstart.md
-      - 快速开始demo:
-          - zvision_nz_series/demo/index.md
-          - demo1: zvision_nz_series/demo/demo1.md
-          - demo2: zvision_nz_series/demo/demo2.md
-      - 快速开始SLAM: zvision_nz_series/slam.md
-  - 产品文档:
-      - ZVISION NZ 系列: zvision_nz_series/index.md
-      - NZ1:
-          - 产品总览: zvision_nz_series/NZ1/index.md
-          -  用户手册: zvision_nz_series/NZ1/cover.md
-          -  阅读提示: zvision_nz_series/NZ1/00-reading-tips.md
-          -  产品概述: zvision_nz_series/NZ1/01-产品概述.md
-          -  硬件说明: zvision_nz_series/NZ1/02-硬件说明.md
-          -  安装指南: zvision_nz_series/NZ1/03-安装指南.md
-          -  电源与连接: zvision_nz_series/NZ1/04-电源与连接.md
-          -  数据输出: zvision_nz_series/NZ1/05-数据输出.md
-          -  SLAM 启动:
-              -  FASTLIO2 使用说明: zvision_nz_series/NZ1/SLAM/01-FASTLIO2使用说明.md
-              -  SuperLIO2 使用说明: zvision_nz_series/NZ1/SLAM/02-SuperLIO2使用说明.md
-          -  Ubuntu快速启动: zvision_nz_series/NZ1/06-Ubuntu快速启动.md
-          -  Windows快速启动: zvision_nz_series/NZ1/07-Windows快速启动.md
-          -  固件升级: zvision_nz_series/NZ1/08-固件升级.md
-          -  时间同步: zvision_nz_series/NZ1/09-时间同步.md
-          -  维护与故障排除: zvision_nz_series/NZ1/13-维护与故障排除.md
-          -  技术参数: zvision_nz_series/NZ1/14-技术参数.md
-          -  常见问题FAQ: zvision_nz_series/NZ1/15-常见问题FAQ.md
-          -  关注我们: zvision_nz_series/NZ1/关注我们.md
-  - 配置说明: config.md
-  - Git 更新流程: GIT_WORKFLOW.md
+  - NZ系列:
+      - 产品总览: zvision_nz_series/NZ系列/产品总览.md
+      - 用户手册: zvision_nz_series/NZ系列/用户手册.md
+      - 阅读提示: zvision_nz_series/NZ系列/阅读提示.md
+      - 安装指南: zvision_nz_series/NZ系列/安装指南.md
+      - 产品详细说明:
+          - NZ1:
+              - 硬件说明: zvision_nz_series/NZ系列/NZ1/硬件说明.md
+              - 电源与连接: zvision_nz_series/NZ系列/NZ1/电源与连接.md
+              - 数据协议: zvision_nz_series/NZ系列/NZ1/数据协议.md
+          - NZ3:
+              - 硬件说明: zvision_nz_series/NZ系列/NZ3/硬件说明.md
+              - 电源与连接: zvision_nz_series/NZ系列/NZ3/电源与连接.md
+              - 数据协议: zvision_nz_series/NZ系列/NZ3/数据协议.md
+          - NZ5:
+              - 硬件说明: zvision_nz_series/NZ系列/NZ5/硬件说明.md
+              - 电源与连接: zvision_nz_series/NZ系列/NZ5/电源与连接.md
+              - 数据协议: zvision_nz_series/NZ系列/NZ5/数据协议.md
+  - 产品通用教程:
+      - 快速启动:
+          - 方法说明: zvision_nz_series/产品通用教程/快速启动/方法说明.md
+          - 常见故障排查: zvision_nz_series/产品通用教程/快速启动/常见故障排查.md
+      - 网络配置: zvision_nz_series/产品通用教程/网络配置.md
+      - ROS Driver & SDK:
+          - 资源下载: zvision_nz_series/产品通用教程/ROS-Driver-SDK/资源下载.md
+          - 使用说明: zvision_nz_series/产品通用教程/ROS-Driver-SDK/使用说明.md
+          - 常见问题排查: zvision_nz_series/产品通用教程/ROS-Driver-SDK/常见问题排查.md
+      - 时间同步:
+          - 使用说明: zvision_nz_series/产品通用教程/时间同步/使用说明.md
+          - 常见问题排查: zvision_nz_series/产品通用教程/时间同步/常见问题排查.md
+      - IMU使用: zvision_nz_series/产品通用教程/IMU使用.md
+      - 常用工具:
+          - wireshark: zvision_nz_series/产品通用教程/常用工具/wireshark.md
+          - 上位机: zvision_nz_series/产品通用教程/常用工具/上位机.md
+          - GUI: zvision_nz_series/产品通用教程/常用工具/GUI.md
+      - 固件升级: zvision_nz_series/产品通用教程/固件升级.md
+  - 开源算法:
+      - SLAM 概览:
+          - FASTLIO2使用说明: zvision_nz_series/开源算法/SLAM概览/FASTLIO2使用说明.md
+          - SuperLIO2使用说明: zvision_nz_series/开源算法/SLAM概览/SuperLIO2使用说明.md
+  - 关注我们: zvision_nz_series/关注我们.md
 
 markdown_extensions:
   - admonition
