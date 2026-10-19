@@ -15,11 +15,11 @@
 | **小巧全能工业设计** | 280g · 100×62×43mm · IP66 · 12-24V · 抗 32G 冲击 |
 ....
 
-👉 [进入 NZ1 系列产品  →](../NZ系列/NZ1/硬件说明.md){ .md-button }
+👉 [进入 NZ1 系列产品  →](../NZ_Series/NZ1/Hardware_Description.md){ .md-button }
 
-👉 [进入 NZ3 系列产品  →](../NZ系列/NZ3/硬件说明.md){ .md-button }
+👉 [进入 NZ3 系列产品  →](../NZ_Series/NZ3/Hardware_Description.md){ .md-button }
 
-👉 [进入 NZ5 系列产品  →](../NZ系列/NZ5/硬件说明.md){ .md-button }
+👉 [进入 NZ5 系列产品  →](../NZ_Series/NZ5/Hardware_Description.md){ .md-button }
 
 ---
 
@@ -34,4 +34,4 @@
 
 ## 下一步
 
-- 📖 阅读 [阅读提示](../NZ系列/阅读提示.md)
+- 📖 阅读 [阅读提示](../NZ_Series/Reading_Tips.md)

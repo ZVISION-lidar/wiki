@@ -15,7 +15,7 @@
 | **小巧全能工业设计** | 280g · 100×62×43mm · IP66 · 12-24V · 抗 32G 冲击 |
 ....
 
-👉 [进入 NZ 系列产品  →](zvision_nz_series/NZ系列/产品总览.md){ .md-button }
+👉 [进入 NZ 系列产品  →](zvision_nz_series/NZ_Series/Product_Overview.md){ .md-button }
 
 ---
 
@@ -30,4 +30,4 @@
 
 ## 下一步
 
-- 📖 阅读 [阅读提示](zvision_nz_series/NZ系列/阅读提示.md)
+- 📖 阅读 [阅读提示](zvision_nz_series/NZ_Series/Reading_Tips.md)
